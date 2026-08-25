@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <title>AI Token & API Cost Calculator</title>
+    <style>
+        body { font-family: sans-serif; max-width: 600px; margin: 2rem auto; padding: 0 1rem; }
+        .input-group { margin-bottom: 1rem; }
+        label { display: block; }
+        input { width: 100%; padding: 0.5rem; }
+        .result { margin-top: 1rem; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>AI Token & API Cost Calculator</h1>
+    <div class='input-group'>
+        <label>Input Tokens (k):</label>
+        <input type='number' id='inputTokens' value='10'>
+    </div>
+    <div class='input-group'>
+        <label>Output Tokens (k):</label>
+        <input type='number' id='outputTokens' value='5'>
+    </div>
+    <div class='input-group'>
+        <label>Cost per 1M Input Tokens ($):</label>
+        <input type='number' id='inputCost' value='0.15'>
+    </div>
+    <div class='input-group'>
+        <label>Cost per 1M Output Tokens ($):</label>
+        <input type='number' id='outputCost' value='0.60'>
+    </div>
+    <div class='result' id='total'>Total Cost: $0.00</div>
+    <script>
+        const inputs = document.querySelectorAll('input');
+        const update = () => {
+            const inT = document.getElementById('inputTokens').value / 1000;
+            const outT = document.getElementById('outputTokens').value / 1000;
+            const inC = document.getElementById('inputCost').value;
+            const outC = document.getElementById('outputCost').value;
+            const total = (inT * inC) + (outT * outC);
+            document.getElementById('total').innerText = 'Total Cost: $' + total.toFixed(4);
+        };
+        inputs.forEach(i => i.addEventListener('input', update));
+        update();
+    </script>
+</body>
+</html>
