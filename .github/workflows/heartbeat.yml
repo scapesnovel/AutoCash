@@ -1,0 +1,115 @@
+name: autocash-heartbeat
+
+on:
+  schedule:
+    - cron: "9,39 * * * *"
+    - cron: "17 3 * * *"
+  workflow_dispatch:
+    inputs:
+      deep:
+        description: "Deep work run (more turns)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: autocash
+  cancel-in-progress: false
+
+jobs:
+  think:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Unlock vault
+        run: node scripts/vault.js dec
+        env:
+          AUTO_VAULT_KEY: ${{ secrets.AUTO_VAULT_KEY }}
+
+      - name: CI gate (syntax + selftest — blocks broken self-modification)
+        id: gate
+        run: |
+          for f in src/index.js src/llm.js src/tools.js src/github.js src/prompt.js src/notify.js src/store.js src/watchdog.js; do
+            node --check "$f"
+          done
+          node scripts/selftest.js
+
+      - name: Page creator about broken code
+        if: failure() && steps.gate.conclusion == 'failure'
+        run: node scripts/alert-ci.js
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          NTFY_TOPIC_URL: ${{ secrets.NTFY_TOPIC_URL }}
+
+      - name: One heartbeat (Think > Act > Observe)
+        run: node src/index.js
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          RUN_ID: ${{ github.run_id }}
+          HEARTBEAT_TURNS: ${{ (github.event.schedule == '17 3 * * *' || inputs.deep) && '28' || '12' }}
+
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          NTFY_TOPIC_URL: ${{ secrets.NTFY_TOPIC_URL }}
+
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          GROQ_MODEL: ${{ vars.GROQ_MODEL }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_MODEL: ${{ vars.GEMINI_MODEL }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          OPENROUTER_MODEL: ${{ vars.OPENROUTER_MODEL }}
+          CEREBRAS_API_KEY: ${{ secrets.CEREBRAS_API_KEY }}
+          MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
+          COHERE_API_KEY: ${{ secrets.COHERE_API_KEY }}
+
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+
+          AUTO_PEXELS: ${{ secrets.AUTO_PEXELS }}
+          AUTO_PIXABAY: ${{ secrets.AUTO_PIXABAY }}
+          AUTO_UNSPLASH: ${{ secrets.AUTO_UNSPLASH }}
+          AUTO_FREESOUND: ${{ secrets.AUTO_FREESOUND }}
+          AUTO_DEVTO: ${{ secrets.AUTO_DEVTO }}
+          AUTO_MEDIUM_TOKEN: ${{ secrets.AUTO_MEDIUM_TOKEN }}
+          AUTO_HASHNODE: ${{ secrets.AUTO_HASHNODE }}
+          AUTO_NEWSAPI: ${{ secrets.AUTO_NEWSAPI }}
+          AUTO_BREVO: ${{ secrets.AUTO_BREVO }}
+          AUTO_REDDIT_ID: ${{ secrets.AUTO_REDDIT_ID }}
+          AUTO_REDDIT_SECRET: ${{ secrets.AUTO_REDDIT_SECRET }}
+          AUTO_X_BEARER: ${{ secrets.AUTO_X_BEARER }}
+          AUTO_PINTEREST_TOKEN: ${{ secrets.AUTO_PINTEREST_TOKEN }}
+          AUTO_GUMROAD: ${{ secrets.AUTO_GUMROAD }}
+          AUTO_LEMONSQUEEZY: ${{ secrets.AUTO_LEMONSQUEEZY }}
+          AUTO_YT_CLIENT_ID: ${{ secrets.AUTO_YT_CLIENT_ID }}
+          AUTO_YT_CLIENT_SECRET: ${{ secrets.AUTO_YT_CLIENT_SECRET }}
+          AUTO_YT_REFRESH: ${{ secrets.AUTO_YT_REFRESH }}
+
+          AUTO_CREATOR_GITHUB: ${{ secrets.AUTO_CREATOR_GITHUB }}
+          AUTO_CREATOR_PASSPHRASE: ${{ secrets.AUTO_CREATOR_PASSPHRASE }}
+
+      - name: Persist state
+        if: always()
+        run: |
+          node scripts/vault.js enc || true
+          git config user.name "autocash"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --quiet || git commit -m "heartbeat: run ${GITHUB_RUN_ID}"
+          git push
+        env:
+          AUTO_VAULT_KEY: ${{ secrets.AUTO_VAULT_KEY }}

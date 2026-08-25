@@ -1,0 +1,13 @@
+{
+  "name": "autocash",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "An autonomous economic agent that lives in a git repository.",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "node src/index.js"
+  }
+}
