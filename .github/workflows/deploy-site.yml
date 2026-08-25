@@ -3,6 +3,8 @@ name: deploy-site
 on:
   push:
     branches: [main]
+    paths:
+      - "site/**"
   workflow_dispatch: {}
 
 permissions:
@@ -16,16 +18,20 @@ concurrency:
 
 jobs:
   deploy:
-    if: ${{ hashFiles('site/index.html') != '' }}
     runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
+      - id: check
+        run: echo "exists=$([ -f site/index.html ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
+      - if: steps.check.outputs.exists == 'true'
+        uses: actions/configure-pages@v5
+      - if: steps.check.outputs.exists == 'true'
+        uses: actions/upload-pages-artifact@v3
         with:
           path: site/
       - id: deployment
+        if: steps.check.outputs.exists == 'true'
         uses: actions/deploy-pages@v4
