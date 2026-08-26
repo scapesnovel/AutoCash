@@ -2,28 +2,24 @@ const PROVIDERS = [
   {
     name: "groq",
     endpoint: "https://api.groq.com/openai/v1/chat/completions",
+    // llama-3.1-8b-instant + llama-3.3-70b-versatile went Enterprise-only on 2026-08-16 (404 for free tier)
     models: () =>
       process.env.GROQ_MODEL
         ? [process.env.GROQ_MODEL]
-        : ["llama-3.1-8b-instant", "openai/gpt-oss-120b", "llama-3.3-70b-versatile"],
+        : ["openai/gpt-oss-20b", "openai/gpt-oss-120b", "qwen/qwen3.6-27b"],
     key: () => process.env.GROQ_API_KEY,
   },
   {
     name: "gemini",
     endpoint: "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions",
+    // gemini-2.0-flash was retired by Google (404) — do not re-add it
     models: () =>
       process.env.GEMINI_MODEL
         ? [process.env.GEMINI_MODEL]
-        : ["gemini-3.6-flash", "gemini-3.1-flash-lite", "gemini-2.0-flash"],
+        : ["gemini-3.6-flash", "gemini-3.1-flash-lite"],
     key: () => process.env.GEMINI_API_KEY,
   },
-  {
-    name: "github-models",
-    endpoint: "https://models.github.ai/inference/chat/completions",
-    models: () =>
-      process.env.GH_MODEL ? [process.env.GH_MODEL] : ["openai/gpt-4o-mini", "openai/gpt-4.1-mini"],
-    key: () => process.env.GITHUB_TOKEN,
-  },
+  // github-models provider removed: GitHub Models was fully retired on 2026-07-30 (permanent HTTP 410)
   {
     name: "cerebras",
     endpoint: "https://api.cerebras.ai/v1/chat/completions",
@@ -90,6 +86,15 @@ export async function chat(messages) {
   }
 
   const errors = [];
+  // pass 0 = normal sweep; pass 1 = one retry sweep after a cooldown,
+  // since 429/503/413 are usually transient per-minute limits.
+  for (let pass = 0; pass < 2; pass++) {
+    if (pass === 1) {
+      const transient = errors.some((e) => /HTTP (429|503|413|500|502)/.test(e));
+      if (!transient) break;
+      console.log("[autocash] all providers failed with transient errors — cooling down 45s, retrying once");
+      await new Promise((r) => setTimeout(r, 45_000));
+    }
   for (const p of PROVIDERS) {
     const key = p.key();
     if (!key) continue;
@@ -125,6 +130,7 @@ export async function chat(messages) {
         errors.push(`${p.name} [${model}]: ${e.message}`);
       }
     }
+  }
   }
   throw new Error(
     errors.length
