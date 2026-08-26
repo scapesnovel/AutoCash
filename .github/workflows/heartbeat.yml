@@ -118,14 +118,14 @@ jobs:
         if: ${{ hashFiles('site/index.html') != '' }}
         uses: actions/deploy-pages@v4
 
-      - name: Deploy to Cloudflare Pages (if configured)
+      - name: Deploy to Cloudflare (if configured)
         if: ${{ hashFiles('site/index.html') != '' }}
         continue-on-error: true
         run: |
           if [ -z "$CLOUDFLARE_API_TOKEN" ]; then
             echo "Cloudflare not configured — skipping (GitHub Pages still live)"
           else
-            npx --yes wrangler@latest pages deploy site --project-name=autocash --commit-dirty=true
+            npx --yes wrangler@latest deploy
           fi
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.AUTO_CLOUDFLARE_TOKEN }}
