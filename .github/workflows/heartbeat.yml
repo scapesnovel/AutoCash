@@ -120,6 +120,7 @@ jobs:
 
       - name: Deploy to Cloudflare Pages (if configured)
         if: ${{ hashFiles('site/index.html') != '' }}
+        continue-on-error: true
         run: |
           if [ -z "$CLOUDFLARE_API_TOKEN" ]; then
             echo "Cloudflare not configured — skipping (GitHub Pages still live)"
