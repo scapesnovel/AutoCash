@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head><title>GPU Cluster Provisioning Calculator</title></head>
+<body>
+<h1>GPU Cluster Provisioning Calculator</h1>
+<p>Estimate your cluster scaling costs and resource requirements.</p>
+<script>
+function calculate() {
+  const gpus = document.getElementById('gpus').value;
+  const hours = document.getElementById('hours').value;
+  document.getElementById('result').innerText = 'Estimated Monthly Cost: $' + (gpus * hours * 0.5 * 30).toFixed(2);
+}
+</script>
+<input id='gpus' type='number' placeholder='Number of GPUs'>
+<input id='hours' type='number' placeholder='Hours per day'>
+<button onclick='calculate()'>Calculate</button>
+<p id='result'></p>
+</body>
+</html>
