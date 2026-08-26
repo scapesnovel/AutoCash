@@ -96,6 +96,7 @@ jobs:
           AUTO_X_BEARER: ${{ secrets.AUTO_X_BEARER }}
           AUTO_PINTEREST_TOKEN: ${{ secrets.AUTO_PINTEREST_TOKEN }}
           AUTO_GUMROAD: ${{ secrets.AUTO_GUMROAD }}
+          AUTO_GUMROADER: ${{ secrets.AUTO_GUMROADER }}
           AUTO_LEMONSQUEEZY: ${{ secrets.AUTO_LEMONSQUEEZY }}
           AUTO_YT_CLIENT_ID: ${{ secrets.AUTO_YT_CLIENT_ID }}
           AUTO_YT_CLIENT_SECRET: ${{ secrets.AUTO_YT_CLIENT_SECRET }}
