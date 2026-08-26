@@ -32,6 +32,23 @@ async function appendJournal(entry) {
   );
 }
 
+// Keep the transcript small enough for free-tier token limits (e.g. Groq 8K TPM).
+// Preserves the system prompt + the most recent exchanges; older observations get truncated.
+function compactMessages(messages, budget = 22_000) {
+  const size = (m) => (m.content || "").length;
+  let total = messages.reduce((n, m) => n + size(m), 0);
+  if (total <= budget) return messages;
+  const KEEP_TAIL = 6;
+  for (let i = 1; i < messages.length - KEEP_TAIL && total > budget; i++) {
+    const m = messages[i];
+    if (size(m) > 500) {
+      total -= size(m) - 500;
+      m.content = m.content.slice(0, 400) + "\n…[older context trimmed to save tokens]";
+    }
+  }
+  return messages;
+}
+
 async function ensureBorn() {
   const p = path.join("STATE.json");
   const state = await loadJson(p);
@@ -60,7 +77,18 @@ async function main() {
   let finalStatus = "";
 
   for (let turn = 1; turn <= MAX_TURNS; turn++) {
-    const { content, provider: prov } = await chat(messages);
+    let content, prov;
+    try {
+      ({ content, provider: prov } = await chat(messages));
+    } catch (e) {
+      // If the brain dies mid-run (rate limits, outages), keep the work done so far
+      // instead of crashing the whole heartbeat. Only fail hard if turn 1 never worked.
+      if (turn === 1) throw e;
+      log(`turn ${turn}: all providers failed mid-run — ending gracefully (${e.message.split("\n")[0]})`);
+      finalStatus = finalStatus || `run cut short at turn ${turn}: LLM providers unavailable`;
+      events.push({ kind: "thought", detail: `providers exhausted at turn ${turn}; run ended early` });
+      break;
+    }
     provider = prov;
     const action = extractJson(content);
 
@@ -86,14 +114,15 @@ async function main() {
     let observation;
     try {
       const result = await runTool(toolName, action.args || {}, events);
-      observation = typeof result === "string" ? result : JSON.stringify(result).slice(0, 12_000);
+      observation = typeof result === "string" ? result : JSON.stringify(result).slice(0, 6_000);
     } catch (e) {
       observation = `TOOL ERROR: ${e.message}`;
       log("tool error:", e.message);
     }
 
     messages.push({ role: "assistant", content: JSON.stringify(action) });
-    messages.push(observationMessage(observation));
+    messages.push(observationMessage(observation.slice(0, 6_000)));
+    messages = compactMessages(messages);
   }
 
   const summary = {
