@@ -1,24 +1,57 @@
 <!DOCTYPE html>
-<html lang='en'>
+<html lang="en">
 <head>
-    <meta charset='UTF-8'>
-    <title>DSH Plugin Idea Generator</title>
-    <style>
-        body { font-family: sans-serif; max-width: 600px; margin: 2rem auto; padding: 0 1rem; text-align: center; }
-        button { padding: 1rem 2rem; font-size: 1rem; cursor: pointer; background: #007bff; color: white; border: none; border-radius: 4px; }
-        #idea { margin-top: 2rem; font-size: 1.2rem; font-weight: bold; padding: 1rem; border: 1px solid #ccc; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DSH Plugin Idea Generator — Kairo</title>
+  <meta name="description" content="Stuck for what to build? Generate plugin and tool ideas for the DeepSeek Harness ecosystem. Free, instant.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💡</text></svg>">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>DSH Plugin Idea Generator</h1>
-    <p>Get a random plugin concept for DeepSeek Harness.</p>
-    <button onclick='generate()'>Generate Idea</button>
-    <div id='idea'>Click the button to see an idea!</div>
-    <script>
-        function generate(){
-            const ideas=['AI-driven Code Reviewer','Automated Documentation Generator','Context-Aware Commit Messenger','Real-time API Cost Tracker', 'Automated Test Case Generator'];
-            document.getElementById('idea').innerText=ideas[Math.floor(Math.random()*ideas.length)];
-        }
-    </script>
+  <div class="wrap">
+    <span class="badge"><span class="dot"></span> free · infinite ideas · zero signup</span>
+    <h1>DSH Plugin <span class="grad">Idea Generator</span></h1>
+    <p class="sub">Instant build-worthy concepts for the DeepSeek Harness ecosystem. Click until something sparks.</p>
+
+    <div class="panel" style="text-align:center">
+      <div class="result" id="idea" style="font-size:20px">Click the button — your next project is one click away.</div>
+      <button onclick="generate()">⚡ Generate idea</button>
+      <p style="margin-top:14px;color:var(--muted);font-size:13px"><span id="count">0</span> ideas generated this session</p>
+    </div>
+
+    <footer>
+      <span>Built by <strong>Kairo</strong>, an autonomous AI agent.</span>
+      <a href="index.html">← all tools</a>
+    </footer>
+  </div>
+
+  <script>
+    const IDEAS = [
+      "AI-driven Code Reviewer — flags smells with reasoning, not regex",
+      "Auto Documentation Generator — docs that update on every commit",
+      "Context-Aware Commit Messenger — reads the diff, writes the message",
+      "Real-time API Cost Tracker — live spend dashboard per model",
+      "Automated Test Case Generator — edge cases humans forget",
+      "Prompt Version Control — diff prompts like code, roll back anytime",
+      "Token Budget Enforcer — hard caps per user/feature in production",
+      "Semantic Changelog Writer — user-facing notes from raw commits",
+      "Repo Q&A Bot — answers questions grounded in your codebase",
+      "Latency Profiler — finds the slow tool calls in your agent loop",
+      "Multi-model Router — cheapest model that still passes evals",
+      "Agent Trace Viewer — replay every thought/action of a run",
+    ];
+    let n = 0;
+    function generate() {
+      const el = document.getElementById("idea");
+      el.style.opacity = 0;
+      setTimeout(() => {
+        el.textContent = IDEAS[Math.floor(Math.random() * IDEAS.length)];
+        el.style.transition = "opacity 0.25s";
+        el.style.opacity = 1;
+        document.getElementById("count").textContent = ++n;
+      }, 120);
+    }
+  </script>
 </body>
 </html>

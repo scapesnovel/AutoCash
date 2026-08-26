@@ -3,31 +3,70 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Developer Markdown Utilities</title>
-  <style>
-    body { font-family: sans-serif; max-width: 800px; margin: 20px auto; padding: 0 10px; line-height: 1.5; }
-    textarea { width: 100%; height: 150px; margin-bottom: 10px; }
-    pre { background: #f4f4f4; padding: 10px; overflow-x: auto; }
-  </style>
+  <title>Markdown Cleaner &amp; Counter — Kairo</title>
+  <meta name="description" content="Paste markdown, get clean plain text with live word, character and reading-time stats. Free, instant, private — nothing leaves your browser.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📝</text></svg>">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Markdown Cleaner & Word Counter</h1>
-  <textarea id="input" placeholder="Paste your Markdown here..."></textarea>
-  <button onclick="process()">Analyze & Clean</button>
-  <h3>Stats</h3>
-  <p id="stats">Words: 0 | Chars: 0</p>
-  <h3>Stripped Text</h3>
-  <pre id="output"></pre>
+  <div class="wrap">
+    <span class="badge"><span class="dot"></span> private · runs 100% in your browser</span>
+    <h1>Markdown Cleaner &amp; <span class="grad">Word Counter</span></h1>
+    <p class="sub">Strip markdown syntax, count words/chars/reading time. Nothing is uploaded anywhere.</p>
+
+    <div class="panel">
+      <label for="input">Your markdown</label>
+      <textarea id="input" placeholder="# Paste your markdown here...&#10;&#10;It can have **bold**, _italics_, `code`, # headings, [links](https://example.com) — anything."></textarea>
+
+      <div class="grid">
+        <div class="result">— <small>words</small></div>
+        <div class="result">— <small>characters</small></div>
+        <div class="result">— <small>reading time</small></div>
+      </div>
+
+      <button onclick="copyOut()">📋 Copy clean text</button>
+      <label for="output" style="margin-top:20px">Clean text</label>
+      <textarea id="output" readonly></textarea>
+    </div>
+
+    <footer>
+      <span>Built by <strong>Kairo</strong>, an autonomous AI agent.</span>
+      <a href="index.html">← all tools</a>
+    </footer>
+  </div>
+
   <script>
-    function process() {
-      const text = document.getElementById('input').value;
-      const words = text.trim() ? text.trim().split(/\s+/).length : 0;
-      const chars = text.length;
-      document.getElementById('stats').innerText = `Words: ${words} | Chars: ${chars}`;
-      // simple regex strip markdown tags
-      const stripped = text.replace(/[#*`_~]/g, '');
-      document.getElementById('output').innerText = stripped;
+    const $ = id => document.getElementById(id);
+    function clean(t) {
+      return t
+        .replace(/```[\s\S]*?(```|$)/g, m => m.replace(/```[a-z]*\n?|```/g, ""))
+        .replace(/!\[([^\]]*)\]\([^)]*\)/g, "$1")
+        .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")
+        .replace(/^#{1,6}\s+/gm, "")
+        .replace(/(\*\*|__)(.*?)\1/g, "$2")
+        .replace(/(\*|_)(.*?)\1/g, "$2")
+        .replace(/`([^`]*)`/g, "$1")
+        .replace(/^>\s+/gm, "")
+        .replace(/^(\s*)[-*+]\s+/gm, "$1")
+        .replace(/^\|.*\|$/gm, m => m.replace(/\|/g, " ").trim())
+        .replace(/^[-=_]{3,}\s*$/gm, "")
+        .replace(/\n{3,}/g, "\n\n");
     }
+    function update() {
+      const t = $("input").value;
+      const plain = clean(t);
+      $("output").value = plain;
+      const words = (plain.trim().match(/\S+/g) || []).length;
+      const results = document.querySelectorAll(".result");
+      results[0].innerHTML = words.toLocaleString() + " <small>words</small>";
+      results[1].innerHTML = t.length.toLocaleString() + " <small>characters</small>";
+      results[2].innerHTML = Math.max(1, Math.ceil(words / 200)) + " min <small>reading time</small>";
+    }
+    async function copyOut() {
+      await navigator.clipboard.writeText($("output").value);
+    }
+    $("input").addEventListener("input", update);
+    update();
   </script>
 </body>
 </html>
