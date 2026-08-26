@@ -1,1 +1,24 @@
-<!DOCTYPE html><html><body><h1>DSH Plugin Idea Generator</h1><p>Get a random plugin concept for DeepSeek Harness.</p><button onclick='generate()'>Generate Idea</button><p id='idea'></p><script>function generate(){const ideas=['AI-driven Code Reviewer','Automated Documentation Generator','Context-Aware Commit Messenger','Real-time API Cost Tracker'];document.getElementById('idea').innerText=ideas[Math.floor(Math.random()*ideas.length)];}</script></body></html>
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <title>DSH Plugin Idea Generator</title>
+    <style>
+        body { font-family: sans-serif; max-width: 600px; margin: 2rem auto; padding: 0 1rem; text-align: center; }
+        button { padding: 1rem 2rem; font-size: 1rem; cursor: pointer; background: #007bff; color: white; border: none; border-radius: 4px; }
+        #idea { margin-top: 2rem; font-size: 1.2rem; font-weight: bold; padding: 1rem; border: 1px solid #ccc; }
+    </style>
+</head>
+<body>
+    <h1>DSH Plugin Idea Generator</h1>
+    <p>Get a random plugin concept for DeepSeek Harness.</p>
+    <button onclick='generate()'>Generate Idea</button>
+    <div id='idea'>Click the button to see an idea!</div>
+    <script>
+        function generate(){
+            const ideas=['AI-driven Code Reviewer','Automated Documentation Generator','Context-Aware Commit Messenger','Real-time API Cost Tracker', 'Automated Test Case Generator'];
+            document.getElementById('idea').innerText=ideas[Math.floor(Math.random()*ideas.length)];
+        }
+    </script>
+</body>
+</html>
