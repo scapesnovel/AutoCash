@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Scraper Sanity Checker | L32 Toolkit</title>
+    <style>body { font-family: sans-serif; max-width: 600px; margin: 2em auto; padding: 0 1em; }</style>
+</head>
+<body>
+    <h1>Scraper Sanity Checker</h1>
+    <p>Prevent 'quiet failures' in your data pipelines. Input your expected bounds.</p>
+    <input id="min" type="number" placeholder="Min Records">
+    <input id="max" type="number" placeholder="Max Records">
+    <button onclick="generate()">Generate Validation Script</button>
+    <pre id="output"></pre>
+    <script>
+        function generate() {
+            const min = document.getElementById('min').value;
+            const max = document.getElementById('max').value;
+            const script = `if (count < ${min} || count > ${max}) { throw new Error('Pipeline variance exceeded!'); }`;
+            document.getElementById('output').textContent = script;
+        }
+    </script>
+</body>
+</html>
