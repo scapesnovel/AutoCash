@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>VoCat Modem Log Analyzer</title>
+<style>body{font-family:sans-serif;padding:20px;line-height:1.6;} textarea{width:100%;height:200px;} #output{margin-top:20px;white-space:pre-wrap;background:#f4f4f4;padding:10px;}</style>
+</head>
+<body>
+<h1>VoCat Modem Log Analyzer</h1>
+<p>Paste your modem logs below to filter for errors and status updates.</p>
+<textarea id="logInput" placeholder="Paste logs here..."></textarea>
+<button onclick="analyze()">Analyze Logs</button>
+<div id="output"></div>
+<script>
+function analyze() {
+  const logs = document.getElementById('logInput').value;
+  const errors = logs.split('\n').filter(line => line.includes('ERROR') || line.includes('FAIL'));
+  document.getElementById('output').innerText = errors.length > 0 ? 'Found Errors:\n' + errors.join('\n') : 'No errors detected.';
+}
+</script>
+</body>
+</html>
