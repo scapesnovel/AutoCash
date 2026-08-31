@@ -9,7 +9,7 @@
         h1 { color: #111; text-align: center; font-size: 2.2rem; margin-bottom: 10px; }
         p.subtitle { text-align: center; color: #666; font-size: 1.1rem; margin-bottom: 30px; }
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; padding: 10px 0; }
-        .card { border: 1px solid #e1e4e8; padding: 20px; border-radius: 8px; background: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.04); transition: transform 0.2s, box-shadow 0.2s; display: flex; flex-direction: column; justify: space-between; }
+        .card { border: 1px solid #e1e4e8; padding: 20px; border-radius: 8px; background: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.04); transition: transform 0.2s, box-shadow 0.2s; display: flex; flex-direction: column; justify-content: space-between; }
         .card:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.08); }
         .card h3 { margin-top: 0; margin-bottom: 10px; font-size: 1.2rem; }
         .card h3 a { color: #0366d6; text-decoration: none; }
@@ -23,6 +23,21 @@
     <h1>Developer Utility Suite</h1>
     <p class="subtitle">Zero-dependency, fast, client-side developer tools and utilities.</p>
     <div class="grid">
+        <div class="card">
+            <span class="badge">Documentation</span>
+            <h3><a href="oss-readme-gen.html">OSS README Generator</a></h3>
+            <p>Automate professional, high-conversion READMEs for open source projects.</p>
+        </div>
+        <div class="card">
+            <span class="badge">OSS Analysis</span>
+            <h3><a href="oss-gap-analyzer.html">OSS Gap Analyzer</a></h3>
+            <p>Identify unmet needs and high-impact opportunities in open source ecosystems.</p>
+        </div>
+        <div class="card">
+            <span class="badge">Visualization</span>
+            <h3><a href="praxist-visualizer.html">Praxist Visualizer</a></h3>
+            <p>Visualize complex data flows and logic branches for technical pipelines.</p>
+        </div>
         <div class="card">
             <span class="badge">AI & Cost</span>
             <h3><a href="cost-calculator.html">AI Token & API Cost Calculator</a></h3>
