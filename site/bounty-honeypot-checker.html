@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GitHub OSS Bounty Honeypot Analyzer | Dev Tools</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; line-height: 1.6; background: #0d1117; color: #c9d1d9; }
+    h1, h2, h3 { color: #58a6ff; }
+    .card { background: #161b22; border: 1px solid #30363d; border-radius: 6px; padding: 20px; margin-bottom: 20px; }
+    input, select, button { width: 100%; padding: 10px; margin: 8px 0; border-radius: 6px; border: 1px solid #30363d; background: #0d1117; color: #c9d1d9; box-sizing: border-box; }
+    button { background: #238636; color: white; font-weight: bold; cursor: pointer; border: none; font-size: 16px; margin-top: 15px; }
+    button:hover { background: #2ea043; }
+    .badge { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; text-transform: uppercase; margin-right: 5px; }
+    .badge-safe { background: #238636; color: white; }
+    .badge-warning { background: #d29922; color: black; }
+    .badge-danger { background: #da3633; color: white; }
+    .output-box { background: #0d1117; border: 1px solid #30363d; padding: 15px; border-radius: 6px; white-space: pre-wrap; font-family: monospace; font-size: 13px; margin-top: 15px; display: none; }
+    a { color: #58a6ff; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <a href="/index.html">&larr; Back to All Tools</a>
+  <h1>GitHub Bounty Risk & Honeypot Analyzer</h1>
+  <p>Analyze open-source repositories offering bounties to detect red flags, honeypot patterns, and non-paying bounty farms.</p>
+
+  <div class="card">
+    <label for="repoInput"><strong>GitHub Repository (owner/repo):</strong></label>
+    <input type="text" id="repoInput" placeholder="e.g. facebook/react or some-user/bounty-repo">
+    
+    <label for="starsCount"><strong>Star Count (Approximate):</strong></label>
+    <input type="number" id="starsCount" placeholder="e.g. 15">
+
+    <label for="openPrs"><strong>Open Pull Requests:</strong></label>
+    <input type="number" id="openPrs" placeholder="e.g. 45">
+
+    <label for="mergedPrs"><strong>Merged Pull Requests:</strong></label>
+    <input type="number" id="mergedPrs" placeholder="e.g. 0">
+
+    <label for="repoAge"><strong>Repository Age:</strong></label>
+    <select id="repoAge">
+      <option value="new">&lt; 30 Days Old</option>
+      <option value="medium">1 - 6 Months Old</option>
+      <option value="old">&gt; 6 Months Old</option>
+    </select>
+
+    <label for="bountyPlatform"><strong>Bounty Platform Listed:</strong></label>
+    <select id="bountyPlatform">
+      <option value="polar">Polar.sh / Algora (Verified Platform)</option>
+      <option value="issue">Issue Comment / Unverified Link</option>
+      <option value="crypto">Direct Crypto / Telegram Link</option>
+    </select>
+
+    <button onclick="analyzeRisk()">Analyze Repository Risk Score</button>
+  </div>
+
+  <div id="resultBox" class="card output-box"></div>
+
+  <div class="card">
+    <h2>Why Check for Bounty Honeypots?</h2>
+    <p>With the rise of autonomous coding agents and open-source bounties, rogue repository owners are creating fake bounty issues to farm free PRs and code solutions without payout mechanisms. Common red flags include zero merged PRs despite high activity, newly created accounts, and off-platform reward promises.</p>
+  </div>
+
+  <script>
+    function sanitize(str) {
+      const temp = document.createElement('div');
+      temp.textContent = str;
+      return temp.innerHTML;
+    }
+
+    function analyzeRisk() {
+      const repo = document.getElementById('repoInput').value.trim() || 'unknown/repo';
+      const stars = parseInt(document.getElementById('starsCount').value) || 0;
+      const openPrs = parseInt(document.getElementById('openPrs').value) || 0;
+      const mergedPrs = parseInt(document.getElementById('mergedPrs').value) || 0;
+      const age = document.getElementById('repoAge').value;
+      const platform = document.getElementById('bountyPlatform').value;
+
+      let riskScore = 0;
+      const flags = [];
+
+      if (stars < 10) {
+        riskScore += 25;
+        flags.push('Low star count (< 10 stars)');
+      }
+      if (mergedPrs === 0 && openPrs > 5) {
+        riskScore += 35;
+        flags.push('High open PR count with 0 merged PRs (Potential code-farming)');
+      }
+      if (age === 'new') {
+        riskScore += 20;
+        flags.push('Repository created within the last 30 days');
+      }
+      if (platform === 'crypto') {
+        riskScore += 30;
+        flags.push('Unverified payout method (Crypto/Telegram direct link)');
+      } else if (platform === 'issue') {
+        riskScore += 15;
+        flags.push('Bounty promised via issue text rather than verified platform escrow');
+      }
+
+      let statusClass = 'badge-safe';
+      let verdict = 'LOW RISK';
+      if (riskScore >= 60) {
+        statusClass = 'badge-danger';
+        verdict = 'HIGH RISK / POTENTIAL HONEYPOT';
+      } else if (riskScore >= 30) {
+        statusClass = 'badge-warning';
+        verdict = 'MEDIUM RISK';
+      }
+
+      const box = document.getElementById('resultBox');
+      box.style.display = 'block';
+      box.innerHTML = `<h3>Analysis Report: ${sanitize(repo)}</h3>` +
+        `<p>Risk Level: <span class="badge ${statusClass}">${verdict}</span> (Score: ${riskScore}/100)</p>` +
+        `<h4>Identified Risk Factors:</h4>` +
+        `<ul>` + (flags.length > 0 ? flags.map(f => `<li>${sanitize(f)}</li>`).join('') : '<li>No significant risk flags detected.</li>') + `</ul>` +
+        `<p><strong>Recommendation:</strong> ${riskScore >= 50 ? 'Avoid submitting large PRs without explicit escrow verification.' : 'Proceed with normal contribution workflows.'}</p>`;
+    }
+  </script>
+</body>
+</html>
