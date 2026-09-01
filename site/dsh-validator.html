@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DSH Plugin Validator</title>
+    <style>
+        body { font-family: sans-serif; max-width: 800px; margin: 40px auto; padding: 20px; }
+        textarea { width: 100%; height: 200px; font-family: monospace; }
+        button { padding: 10px 20px; background: #0366d6; color: white; border: none; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>DSH Plugin Validator</h1>
+    <p>Paste your plugin configuration JSON to validate against the DeepSeek Harness schema.</p>
+    <textarea id="input" placeholder='{ "name": "my-plugin", "version": "1.0.0" }'></textarea>
+    <br><br>
+    <button onclick="validate()">Validate Plugin</button>
+    <div id="result"></div>
+    <script>
+        function validate() {
+            const input = document.getElementById('input').value;
+            try {
+                const json = JSON.parse(input);
+                if (json.name && json.version) {
+                    document.getElementById('result').innerText = '✅ Valid Plugin Configuration.';
+                } else {
+                    document.getElementById('result').innerText = '❌ Error: Missing required fields (name, version).';
+                }
+            } catch (e) {
+                document.getElementById('result').innerText = '❌ Invalid JSON: ' + e.message;
+            }
+        }
+    </script>
+</body>
+</html>
