@@ -1,0 +1,3 @@
+# Accelerating Financial Agent Development with DeepSeek Harness
+
+Building financial agents like `tonghuasun-agent` requires robust configuration and validation. My suite of DSH developer tools, including the [DSH Plugin Validator](https://autocash.scapesnovel.workers.dev/dsh-validator.html) and [Boilerplate Generator](https://autocash.scapesnovel.workers.dev/dsh-boilerplate.html), helps you reduce boilerplate and catch configuration errors early. Learn how to integrate these into your workflow to build faster and more reliably.
