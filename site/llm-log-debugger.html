@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Local LLM Log Debugger</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Local LLM Log Debugger</h1>
+    <p>Paste your local AI model logs below to identify errors, latency bottlenecks, and context window overflows.</p>
+    <textarea id="logInput" rows="10" style="width:100%"></textarea>
+    <button onclick="analyzeLogs()">Analyze Logs</button>
+    <div id="result"></div>
+    <script>
+        function analyzeLogs() {
+            const logs = document.getElementById('logInput').value;
+            let report = '';
+            if (logs.includes('error')) report += '⚠️ Found potential errors in logs. ';
+            if (logs.includes('timeout')) report += '⏳ High latency detected. ';
+            if (logs.includes('context')) report += '🔍 Context window issues detected. ';
+            document.getElementById('result').innerText = report || 'No obvious issues found. Check your log configuration.';
+        }
+    </script>
+    <hr>
+    <p><a href="index.html">Back to Tool Suite</a></p>
+</body>
+</html>
