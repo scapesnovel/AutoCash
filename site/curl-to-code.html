@@ -1,0 +1,117 @@
+<!DOCTYPE html>|
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>cURL to Fetch & Axios Converter - Free Online Tool</title>
+    <meta name="description" content="Convert cURL commands to JavaScript fetch and Axios syntax instantly in your browser. Zero server requests, privacy-focused developer tool.">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+        .header { text-align: center; margin-bottom: 30px; }
+        .banner { background: #e3f2fd; border-left: 4px solid #2196f3; padding: 12px 20px; margin-bottom: 25px; border-radius: 4px; }
+        .banner a { color: #1565c0; font-weight: bold; text-decoration: none; }
+        .input-group, .output-group { margin-bottom: 20px; }
+        label { font-weight: bold; display: block; margin-bottom: 8px; font-size: 0.95rem; }
+        textarea { width: 100%; height: 140px; font-family: monospace; font-size: 0.9rem; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        .controls { margin-bottom: 15px; display: flex; gap: 10px; align-items: center; }
+        select, button { padding: 8px 16px; font-size: 0.95rem; border-radius: 4px; border: 1px solid #ccc; cursor: pointer; }
+        button { background: #0066cc; color: white; border: none; font-weight: bold; }
+        button:hover { background: #0052a3; }
+        pre { background: #272822; color: #f8f8f2; padding: 15px; border-radius: 4px; overflow-x: auto; font-family: monospace; font-size: 0.9rem; margin: 0; min-height: 140px; }
+        footer { margin-top: 40px; text-align: center; font-size: 0.85rem; color: #666; border-top: 1px solid #eee; padding-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>cURL to Code Converter</h1>
+            <p>Transform raw cURL requests into JavaScript Fetch or Axios code snippets immediately.</p>
+        </div>
+        <div class="banner">
+            🚀 <strong>Accelerate your development workflow!</strong> Check out our <a href="products/dev-starter-bundle.html">Developer Tooling Starter Bundle</a> for complete automation scripts.
+        </div>
+        <div class="input-group">
+            <label for="curl-input">Paste cURL Command:</label>
+            <textarea id="curl-input" placeholder="curl -X POST https://api.example.com/data -H 'Content-Type: application/json' -d '{\"key\": \"value\"}'"></textarea>
+        </div>
+        <div class="controls">
+            <label for="target-lang" style="margin-bottom:0;">Target Output:</label>
+            <select id="target-lang">
+                <option value="fetch">JavaScript (fetch)</option>
+                <option value="axios">JavaScript (Axios)</option>
+            </select>
+            <button onclick="convertCurl()">Convert Now</button>
+        </div>
+        <div class="output-group">
+            <label>Generated Code:</label>
+            <pre><code id="output-code">// Result will appear here...</code></pre>
+        </div>
+        <footer>
+            <p>100% Client-side. No data is sent to external servers. Built by Kairo.</p>
+        </footer>
+    </div>
+    <script>
+        function parseCurl(curlCmd) {
+            let url = '';
+            let method = 'GET';
+            let headers = {};
+            let body = null;
+
+            const tokens = curlCmd.trim().match(/\S+|"[^"]*"|'[^']*'/g) || [];
+            for (let i = 0; i < tokens.length; i++) {
+                let token = tokens[i].replace(/^['"]|['"]$/g, '');
+                if (token === 'curl') continue;
+                if (token === '-X' || token === '--request') {
+                    method = tokens[i + 1]?.replace(/^['"]|['"]$/g, '').toUpperCase() || 'GET';
+                    i++;
+                } else if (token === '-H' || token === '--header') {
+                    const header = tokens[i + 1]?.replace(/^['"]|['"]$/g, '');
+                    if (header && header.includes(':')) {
+                        const parts = header.split(':');
+                        headers[parts[0].trim()] = parts.slice(1).join(':').trim();
+                    }
+                    i++;
+                } else if (token === '-d' || token === '--data' || token === '--data-raw') {
+                    body = tokens[i + 1]?.replace(/^['"]|['"]$/g, '');
+                    if (method === 'GET') method = 'POST';
+                    i++;
+                } else if (token.startsWith('http://') || token.startsWith('https://')) {
+                    url = token;
+                }
+            }
+            return { url, method, headers, body };
+        }
+
+        function convertCurl() {
+            const raw = document.getElementById('curl-input').value;
+            const target = document.getElementById('target-lang').value;
+            if (!raw.trim()) {
+                document.getElementById('output-code').textContent = '// Please enter a cURL command.';
+                return;
+            }
+            const parsed = parseCurl(raw);
+            let code = '';
+            if (target === 'fetch') {
+                const opts = { method: parsed.method };
+                if (Object.keys(parsed.headers).length > 0) opts.headers = parsed.headers;
+                if (parsed.body) opts.body = parsed.body;
+                code = `fetch("${parsed.url || 'https://api.example.com'}", ${JSON.stringify(opts, null, 2)})
+  .then(res => res.json())
+  .then(data => console.log(data))
+  .catch(err => console.error(err));`;
+            } else if (target === 'axios') {
+                const opts = { method: parsed.method.toLowerCase(), url: parsed.url || 'https://api.example.com' };
+                if (Object.keys(parsed.headers).length > 0) opts.headers = parsed.headers;
+                if (parsed.body) {
+                    try { opts.data = JSON.parse(parsed.body); } catch(e) { opts.data = parsed.body; }
+                }
+                code = `axios(${JSON.stringify(opts, null, 2)})
+  .then(response => console.log(response.data))
+  .catch(error => console.error(error));`;
+            }
+            document.getElementById('output-code').textContent = code;
+        }
+    </script>
+</body>
+</html>
