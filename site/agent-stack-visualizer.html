@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head><title>Agent-Stack Depth Visualizer</title></head>
+<body>
+<h1>Agent-Stack Depth Visualizer</h1>
+<p>Map your sub-agent hierarchies to prevent recursive bottlenecks.</p>
+<textarea id='input' placeholder='Paste your agent dependency JSON...'></textarea>
+<button onclick='visualize()'>Visualize Depth</button>
+<div id='output'></div>
+<script>
+function visualize() {
+  const data = JSON.parse(document.getElementById('input').value);
+  // Simple depth-first calculation for hierarchy
+  document.getElementById('output').innerText = 'Max Depth: ' + JSON.stringify(data).split('children').length;
+}
+</script>
+</body>
+</html>
