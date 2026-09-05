@@ -4,51 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DevTool Suite - Free Developer Utilities & Micro-Tools</title>
-    <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height: 1.6; max-width: 1000px; margin: 0 auto; padding: 20px; color: #333; }
-        h1 { color: #111; text-align: center; font-size: 2.2rem; margin-bottom: 10px; }
-        p.subtitle { text-align: center; color: #666; font-size: 1.1rem; margin-bottom: 30px; }
-        .cta { background: #fff3cd; border: 1px solid #ffeeba; padding: 20px; border-radius: 8px; text-align: center; margin-bottom: 40px; }
-        .cta a { color: #856404; font-weight: bold; text-decoration: underline; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; padding: 10px 0; }
-        .card { border: 1px solid #e1e4e8; padding: 20px; border-radius: 8px; background: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.04); transition: transform 0.2s, box-shadow 0.2s; display: flex; flex-direction: column; justify-content: space-between; }
-        .card:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.08); }
-        .card h3 { margin-top: 0; margin-bottom: 10px; font-size: 1.2rem; }
-        .card h3 a { color: #0366d6; text-decoration: none; }
-        .card p { color: #586069; font-size: 0.9rem; flex-grow: 1; margin-bottom: 15px; }
-        .badge { display: inline-block; background: #e1f5fe; color: #0288d1; font-size: 0.75rem; font-weight: bold; padding: 2px 8px; border-radius: 12px; margin-bottom: 10px; width: fit-content; }
-        footer { text-align: center; margin-top: 40px; border-top: 1px solid #eaeaea; padding-top: 20px; color: #888; font-size: 0.9rem; }
-    </style>
+    <style>body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height: 1.6; max-width: 1000px; margin: 0 auto; padding: 20px; } .tool-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px; margin-top: 20px; } .tool-card { border: 1px solid #ddd; padding: 15px; border-radius: 8px; text-decoration: none; color: #333; } .tool-card:hover { border-color: #007bff; } h1 { color: #222; } .cta { background: #f8f9fa; padding: 20px; border-left: 5px solid #007bff; margin-bottom: 20px; }</style>
 </head>
 <body>
-    <h1>Developer Utility Suite</h1>
-    <p class="subtitle">Zero-dependency, fast, client-side developer tools and utilities.</p>
-    <div class="cta">
-        🚀 <strong>Need more speed?</strong> Check out our <a href="products/dev-starter-bundle.html">Developer Tooling Starter Bundle</a> for advanced automation templates.
+    <h1>DevTool Suite</h1>
+    <div class="cta"><strong>Need faster development?</strong> Check out our <a href="/products/dev-starter-bundle.html">Professional Developer Starter Bundle</a>.</div>
+    <div class="tool-grid">
+        <a href="m3e-orchestrator.html" class="tool-card"><h3>M3E Prompt Orchestrator</h3><p>Generate optimized prompts for Material 3 Expressive designs.</p></a>
+        <a href="praxist-generator.html" class="tool-card"><h3>PRAXIST Task Generator</h3><p>Generate structured research definitions.</p></a>
+        <a href="index.html" class="tool-card"><h3>View all 26 tools</h3><p>See our full suite of developer utilities.</p></a>
     </div>
-    <div class="grid">
-        <div class="card"><span class="badge">Ecosystem</span><h3><a href="mcp-config-gen.html">MCP Server Config Generator</a></h3><p>Generate JSON configuration for your Model Context Protocol servers.</p></div>
-        <div class="card"><span class="badge">Research</span><h3><a href="praxist-generator.html">PRAXIST Task Generator</a></h3><p>Generate structured task definitions for PRAXIST autonomous research.</p></div>
-        <div class="card"><span class="badge">Research</span><h3><a href="praxist-validator.html">PRAXIST Task Validator</a></h3><p>Validate research tasks for the PRAXIST ecosystem.</p></div>
-        <div class="card"><span class="badge">Debugging</span><h3><a href="llm-log-debugger.html">Local LLM Log Debugger</a></h3><p>Debug local LLM logs with ease.</p></div>
-        <div class="card"><span class="badge">AI</span><h3><a href="ollama-config-gen.html">Ollama Modelfile Generator</a></h3><p>Generate Modelfile syntax for local AI models.</p></div>
-        <div class="card"><span class="badge">Conversion</span><h3><a href="curl-to-code.html">cURL to Code Converter</a></h3><p>Convert cURL commands to Fetch/Axios snippets.</p></div>
-        <div class="card"><span class="badge">Security</span><h3><a href="bounty-honeypot-checker.html">GitHub Bounty Risk Analyzer</a></h3><p>Analyze open source bounty repos for honeypot indicators.</p></div>
-        <div class="card"><span class="badge">Ecosystem</span><h3><a href="dsh-validator.html">DSH Plugin Validator</a></h3><p>Validate DeepSeek Harness plugin configuration.</p></div>
-        <div class="card"><span class="badge">Documentation</span><h3><a href="oss-readme-gen.html">OSS README Generator</a></h3><p>Automate professional READMEs for OSS projects.</p></div>
-        <div class="card"><span class="badge">OSS Analysis</span><h3><a href="oss-gap-analyzer.html">OSS Gap Analyzer</a></h3><p>Identify high-impact opportunities in OSS.</p></div>
-        <div class="card"><span class="badge">AI & Cost</span><h3><a href="cost-calculator.html">AI Token Cost Calculator</a></h3><p>Compare LLM API token costs.</p></div>
-        <div class="card"><span class="badge">Conversion</span><h3><a href="json-to-ts.html">JSON to TypeScript Interface</a></h3><p>Convert JSON objects to TypeScript interfaces instantly.</p></div>
-        <div class="card"><span class="badge">Debugging</span><h3><a href="log-query-gen.html">Log Query Generator</a></h3><p>Generate optimized log queries for debugging.</p></div>
-        <div class="card"><span class="badge">Ecosystem</span><h3><a href="dsh-boilerplate.html">DSH Plugin Boilerplate</a></h3><p>Generate JSON snippets for DSH plugins.</p></div>
-        <div class="card"><span class="badge">Infrastructure</span><h3><a href="gpu-calculator.html">GPU Provisioning Calculator</a></h3><p>Calculate requirements for distributed LLM inference.</p></div>
-        <div class="card"><span class="badge">Automation</span><h3><a href="grok-optimizer.html">Grok Bot Config Optimizer</a></h3><p>Optimize bot parameters for Grok 0.18.</p></div>
-        <div class="card"><span class="badge">Data Quality</span><h3><a href="scraper-sanity.html">Scraper Sanity Checker</a></h3><p>Validate web scraping outputs.</p></div>
-        <div class="card"><span class="badge">UI</span><h3><a href="threeui-generator.html">ThreeUI Catalog Generator</a></h3><p>Build 3D web UI component definitions.</p></div>
-        <div class="card"><span class="badge">Networking</span><h3><a href="vocat-analyzer.html">VoCat Log Analyzer</a></h3><p>Analyze connection logs for Go-based modem tools.</p></div>
-        <div class="card"><span class="badge">AI</span><h3><a href="agent-skill-generator.html">Agent Skill Generator</a></h3><p>Define modular skills for autonomous agents.</p></div>
-        <div class="card"><span class="badge">Security</span><h3><a href="ai-key-validator.html">AI Key Validator</a></h3><p>Validate API keys and configuration strings.</p></div>
-    </div>
-    <footer>&copy; 2026 Developer Utility Suite</footer>
 </body>
 </html>
