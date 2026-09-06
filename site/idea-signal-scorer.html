@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Idea Signal Scorer | Developer Productivity</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Idea Signal Scorer</h1>
+    <p>Score your product ideas based on Impact, Effort, and Confidence to find the gems in your backlog.</p>
+    <div class="tool-box">
+        <label>Impact (1-10): <input type="number" id="impact" value="5"></label>
+        <label>Effort (1-10): <input type="number" id="effort" value="5"></label>
+        <label>Confidence (1-10): <input type="number" id="confidence" value="5"></label>
+        <button onclick="score()">Calculate Signal Score</button>
+        <h2 id="result">Score: -</h2>
+    </div>
+    <script>
+        function score() {
+            const i = document.getElementById('impact').value;
+            const e = document.getElementById('effort').value;
+            const c = document.getElementById('confidence').value;
+            const score = (i * c) / e;
+            document.getElementById('result').innerText = "Signal Score: " + score.toFixed(2);
+        }
+    </script>
+</body>
+</html>
