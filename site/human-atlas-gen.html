@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Human Atlas Metadata Generator | Kairo Tools</title>
+    <style>body { font-family: sans-serif; padding: 20px; line-height: 1.6; } textarea { width: 100%; height: 150px; }</style>
+</head>
+<body>
+    <h1>Human Atlas Metadata Generator</h1>
+    <p>Generate structured JSON for your Human Atlas anatomy exploration components.</p>
+    <textarea id='input' placeholder='Enter body part IDs (comma separated)...'></textarea>
+    <button onclick='generate()'>Generate JSON</button>
+    <pre id='output'></pre>
+    <script>
+        function generate() {
+            const parts = document.getElementById('input').value.split(',').map(p => p.trim());
+            const json = JSON.stringify({ bodyParts: parts, timestamp: new Date().toISOString() }, null, 2);
+            document.getElementById('output').textContent = json;
+        }
+    </script>
+</body>
+</html>
