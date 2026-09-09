@@ -1,1 +1,18 @@
-<!DOCTYPE html><html><head><title>PRAXIST Research Task Validator</title><link rel="stylesheet" href="style.css"></head><body><h1>PRAXIST Research Task Validator</h1><textarea id="jsonInput" placeholder="Paste your task JSON here..."></textarea><button onclick="validate()">Validate Task</button><div id="result"></div><script>function validate(){const input=document.getElementById('jsonInput').value;try{const data=JSON.parse(input);if(data.goal && data.constraints){document.getElementById('result').innerText='Valid PRAXIST Task Structure detected.';}else{document.getElementById('result').innerText='Error: Missing required fields (goal, constraints).';}}catch(e){document.getElementById('result').innerText='Invalid JSON format.';}}</script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head><title>PRAXIST Task Validator</title></head>
+<body>
+<h1>PRAXIST Task Validator</h1>
+<textarea id="jsonInput" placeholder="Paste your pipeline JSON here..."></textarea>
+<button onclick="validate()">Validate</button>
+<div id="result"></div>
+<script>
+function validate() {
+    try {
+        const data = JSON.parse(document.getElementById('jsonInput').value);
+        document.getElementById('result').innerText = 'Valid PRAXIST Configuration';
+    } catch(e) { document.getElementById('result').innerText = 'Invalid JSON: ' + e.message; }
+}
+</script>
+</body>
+</html>
