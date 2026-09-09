@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRAXIST Pipeline Config Generator - Autonomous Research Workflows</title>
+    <meta name="description" content="Free online tool to generate, validate, and export pipeline configurations for PRAXIST autonomous research agents.">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+        .card { background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-weight: 600; margin-bottom: 5px; }
+        input, select, textarea { width: 100%; padding: 8px 12px; border: 1px solid #ced4da; border-radius: 4px; box-sizing: border-box; }
+        button { background: #0d6efd; color: white; border: none; padding: 10px 18px; border-radius: 4px; cursor: pointer; font-weight: 600; }
+        button:hover { background: #0b5ed7; }
+        pre { background: #212529; color: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto; }
+        .banner { background: #e7f1ff; border-left: 4px solid #0d6efd; padding: 12px 16px; margin-bottom: 20px; border-radius: 0 4px 4px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="banner">
+            <strong>Kairo Suite:</strong> Explore 46+ zero-dependency developer micro-tools. <a href="index.html">View all tools &rarr;</a>
+        </div>
+        <h1>PRAXIST Pipeline Config Generator</h1>
+        <p>Configure autonomous multi-agent research pipelines, evaluation thresholds, and safe execution bounds for PRAXIST frameworks.</p>
+        
+        <div class="card">
+            <div class="form-group">
+                <label for="pipelineName">Pipeline Name</label>
+                <input type="text" id="pipelineName" value="deep-market-research-v1">
+            </div>
+            <div class="form-group">
+                <label for="maxDepth">Max Research Depth (Steps)</label>
+                <input type="number" id="maxDepth" value="5" min="1" max="20">
+            </div>
+            <div class="form-group">
+                <label for="evalStrategy">Evaluation Strategy</label>
+                <select id="evalStrategy">
+                    <option value="strict-consensus">Strict Multi-Agent Consensus</option>
+                    <option value="confidence-weighted">Confidence-Weighted Score (&gt;0.85)</option>
+                    <option value="human-in-the-loop">Human Approval Threshold</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="allowedDomains">Allowed Data Domains / Sources (comma separated)</label>
+                <input type="text" id="allowedDomains" value="arxiv.org, github.com, news.ycombinator.com">
+            </div>
+            <button onclick="generateConfig()">Generate PRAXIST Config</button>
+        </div>
+
+        <div class="card">
+            <h3>Generated Pipeline Definition (JSON)</h3>
+            <pre id="outputConfig">Click 'Generate PRAXIST Config' above...</pre>
+            <button onclick="copyOutput()" style="background: #198754;">Copy Config</button>
+        </div>
+    </div>
+
+    <script>
+        function generateConfig() {
+            const name = document.getElementById('pipelineName').value.trim() || 'praxist-pipeline';
+            const depth = parseInt(document.getElementById('maxDepth').value, 10) || 5;
+            const evalStrat = document.getElementById('evalStrategy').value;
+            const domains = document.getElementById('allowedDomains').value.split(',').map(d => d.trim()).filter(Boolean);
+
+            const config = {
+                praxist_version: "0.14.0",
+                pipeline_id: name,
+                execution: {
+                    max_research_steps: depth,
+                    allow_web_browsing: true,
+                    domain_whitelist: domains,
+                    timeout_seconds: depth * 120
+                },
+                verification: {
+                    strategy: evalStrat,
+                    min_source_citations: 3,
+                    hallucination_check: true
+                },
+                output: {
+                    format: "markdown_report",
+                    include_raw_logs: false
+                }
+            };
+
+            document.getElementById('outputConfig').textContent = JSON.stringify(config, null, 2);
+        }
+
+        function copyOutput() {
+            const content = document.getElementById('outputConfig').textContent;
+            navigator.clipboard.writeText(content).then(() => alert('Configuration copied to clipboard!'));
+        }
+    </script>
+</body>
+</html>
