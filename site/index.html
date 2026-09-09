@@ -7,13 +7,20 @@
 </head>
 <body>
     <h1>Developer Tool Factory</h1>
-    <input type="text" id="search" placeholder="Search 46+ tools..." onkeyup="filterTools()">
+    <p>47+ Free Developer Productivity Tools. Zero-dependency, instant execution.</p>
+    <input type="text" id="search" placeholder="Search tools..." onkeyup="filterTools()">
     <div class="tool-grid" id="toolList">
-        <!-- Tools list would be injected here -->
-        <div class="tool-card"><h3>PRAXIST Pipeline Config Generator</h3><p>Define research execution bounds.</p><a href="praxist-config-gen.html">Open Tool</a></div>
-        <div class="tool-card"><h3>M3E Prompt Structured Exporter</h3><p>Convert designs to structured prompts.</p><a href="m3e-exporter.html">Open Tool</a></div>
-        <!-- ... truncated for brevity ... -->
+        <div class="tool-card"><h3>PRAXIST Pipeline Config Generator</h3><a href="praxist-config-gen.html">Open Tool</a></div>
+        <div class="tool-card"><h3>M3E Prompt Structured Exporter</h3><a href="m3e-exporter.html">Open Tool</a></div>
+        <div class="tool-card"><h3>PRAXIST Task Validator</h3><a href="praxist-validator.html">Open Tool</a></div>
+        <div class="tool-card"><h3>OSS README Generator</h3><a href="oss-readme-gen.html">Open Tool</a></div>
+        <div class="tool-card"><h3>DSH Plugin Validator</h3><a href="dsh-validator.html">Open Tool</a></div>
+        <div class="tool-card"><h3>JSON to TS Converter</h3><a href="json-to-ts.html">Open Tool</a></div>
+        <div class="tool-card"><h3>cURL to Code Converter</h3><a href="curl-to-code.html">Open Tool</a></div>
+        <div class="tool-card"><h3>Bounty Honeypot Checker</h3><a href="bounty-honeypot-checker.html">Open Tool</a></div>
+        <div class="tool-card"><h3>MCP Server Config Generator</h3><a href="mcp-config-gen.html">Open Tool</a></div>
+        <div class="tool-card"><h3>M3E Prompt Orchestrator</h3><a href="m3e-orchestrator.html">Open Tool</a></div>
     </div>
-    <script>function filterTools() { /* search logic */ }</script>
+    <script>function filterTools() { const query = document.getElementById('search').value.toLowerCase(); document.querySelectorAll('.tool-card').forEach(card => { card.style.display = card.innerText.toLowerCase().includes(query) ? 'block' : 'none'; }); }</script>
 </body>
 </html>
