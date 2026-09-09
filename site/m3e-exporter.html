@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>M3E Prompt Structured Exporter</title>
+    <style>body{font-family:sans-serif;max-width:800px;margin:2em auto;padding:0 1em;}textarea{width:100%;height:200px;}</style>
+</head>
+<body>
+    <h1>M3E Prompt Structured Exporter</h1>
+    <p>Paste your M3E canvas output below to convert it into a structured prompt.</p>
+    <textarea id="input" placeholder="Paste canvas JSON/raw output here..."></textarea>
+    <button onclick="exportPrompt()">Export Structured Prompt</button>
+    <pre id="output"></pre>
+    <script>
+        function exportPrompt() {
+            const input = document.getElementById('input').value;
+            const output = document.getElementById('output');
+            // Basic structure transformation for M3E vibe-coding prompts
+            const structured = `--- 
+SYSTEM: You are an expert UI developer.
+CONTEXT: M3E Design System Canvas Export
+TASK: Implement the following component based on the provided vibe-coding prompt:
+${input}
+---`;
+            output.textContent = structured;
+        }
+    </script>
+</body>
+</html>
