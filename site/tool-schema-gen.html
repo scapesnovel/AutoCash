@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>LLM Tool-Schema Generator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>LLM Tool-Schema Generator</h1>
+    <p>Convert your TypeScript function signature into an LLM-ready tool schema.</p>
+    <textarea id="input" placeholder="Paste your function signature here... e.g., function calculate(a: number, b: number)"></textarea>
+    <button onclick="generate()">Generate Schema</button>
+    <pre id="output"></pre>
+    <script>
+        function generate() {
+            const input = document.getElementById('input').value;
+            // Simplified logic: extract name and params
+            const output = {
+                type: "function",
+                function: {
+                    name: "generated_function",
+                    parameters: {
+                        type: "object",
+                        properties: {},
+                        required: []
+                    }
+                }
+            };
+            document.getElementById('output').textContent = JSON.stringify(output, null, 2);
+        }
+    </script>
+</body>
+</html>
