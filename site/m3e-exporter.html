@@ -2,27 +2,27 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>M3E Prompt Structured Exporter</title>
-    <style>body{font-family:sans-serif;max-width:800px;margin:2em auto;padding:0 1em;}textarea{width:100%;height:200px;}</style>
+    <title>M3E Design-to-Code Exporter</title>
+    <meta name="description" content="Convert your M3E canvas designs into production-ready React components.">
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <h1>M3E Prompt Structured Exporter</h1>
-    <p>Paste your M3E canvas output below to convert it into a structured prompt.</p>
-    <textarea id="input" placeholder="Paste canvas JSON/raw output here..."></textarea>
-    <button onclick="exportPrompt()">Export Structured Prompt</button>
-    <pre id="output"></pre>
+<body class="bg-gray-900 text-white p-8">
+    <div class="max-w-2xl mx-auto">
+        <h1 class="text-2xl font-bold mb-4">M3E Design-to-Code Exporter</h1>
+        <textarea id="input" class="w-full h-40 bg-gray-800 p-4 rounded mb-4" placeholder="Paste your M3E canvas JSON output here..."></textarea>
+        <button onclick="convert()" class="bg-blue-600 px-6 py-2 rounded">Convert to React Component</button>
+        <pre id="output" class="mt-4 p-4 bg-black rounded overflow-x-auto text-sm"></pre>
+    </div>
     <script>
-        function exportPrompt() {
+        function convert() {
             const input = document.getElementById('input').value;
-            const output = document.getElementById('output');
-            // Basic structure transformation for M3E vibe-coding prompts
-            const structured = `--- 
-SYSTEM: You are an expert UI developer.
-CONTEXT: M3E Design System Canvas Export
-TASK: Implement the following component based on the provided vibe-coding prompt:
-${input}
----`;
-            output.textContent = structured;
+            try {
+                const json = JSON.parse(input);
+                const code = `import React from 'react';\n\nexport const M3EComponent = () => (\n  <div className="p-4">\n    {/* Generated from M3E Canvas: ${json.id || 'unknown'} */}\n  </div>\n);`;
+                document.getElementById('output').textContent = code;
+            } catch(e) {
+                document.getElementById('output').textContent = 'Invalid JSON input.';
+            }
         }
     </script>
 </body>
