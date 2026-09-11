@@ -2,33 +2,63 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Kairo's Developer Tool Factory</title>
-    <style>body { font-family: sans-serif; padding: 20px; line-height: 1.6; } .tool-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px; } .tool-card { border: 1px solid #ccc; padding: 15px; border-radius: 8px; }</style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kairo's Developer Productivity Factory - Free Tools</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; padding: 20px; line-height: 1.6; background: #fafafa; color: #333; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        h1 { color: #111; }
+        .search-box { width: 100%; padding: 12px; font-size: 16px; border: 1px solid #ddd; border-radius: 6px; margin-bottom: 20px; box-sizing: border-box; }
+        .tool-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; }
+        .tool-card { border: 1px solid #e0e0e0; padding: 15px; border-radius: 8px; background: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.02); display: flex; flex-direction: column; justify-content: space-between; }
+        .tool-card h3 { margin-top: 0; font-size: 16px; color: #0066cc; }
+        .tool-card a { display: inline-block; padding: 8px 12px; background: #0066cc; color: #fff; text-decoration: none; border-radius: 4px; text-align: center; font-weight: bold; font-size: 14px; margin-top: 10px; }
+        .tool-card a:hover { background: #0052a3; }
+    </style>
 </head>
 <body>
-    <h1>Developer Tool Factory</h1>
-    <p>50 Free Developer Productivity Tools. Zero-dependency, instant execution.</p>
-    <input type="text" id="search" placeholder="Search tools..." onkeyup="filterTools()">
-    <div class="tool-grid" id="toolList">
-        <div class="tool-card"><h3>M3E Design-to-Code Exporter</h3><a href="m3e-exporter.html">Open Tool</a></div>
-        <div class="tool-card"><h3>LLM Tool-Schema Generator</h3><a href="tool-schema-gen.html">Open Tool</a></div>
-        <div class="tool-card"><h3>PRAXIST Agentic Flow Visualizer</h3><a href="praxist-visualizer.html">Open Tool</a></div>
-        <div class="tool-card"><h3>PRAXIST Pipeline Config Generator</h3><a href="praxist-config-gen.html">Open Tool</a></div>
-        <div class="tool-card"><h3>M3E Prompt Structured Exporter</h3><a href="m3e-exporter.html">Open Tool</a></div>
-        <div class="tool-card"><h3>PRAXIST Task Validator</h3><a href="praxist-validator.html">Open Tool</a></div>
-        <div class="tool-card"><h3>OSS README Generator</h3><a href="oss-readme-gen.html">Open Tool</a></div>
-        <div class="tool-card"><h3>DSH Plugin Validator</h3><a href="dsh-validator.html">Open Tool</a></div>
-        <div class="tool-card"><h3>JSON to TS Converter</h3><a href="json-to-ts.html">Open Tool</a></div>
-        <div class="tool-card"><h3>cURL to Code Converter</h3><a href="curl-to-code.html">Open Tool</a></div>
-        <div class="tool-card"><h3>Bounty Honeypot Checker</h3><a href="bounty-honeypot-checker.html">Open Tool</a></div>
-        <div class="tool-card"><h3>MCP Server Config Generator</h3><a href="mcp-config-gen.html">Open Tool</a></div>
-        <div class="tool-card"><h3>M3E Prompt Orchestrator</h3><a href="m3e-orchestrator.html">Open Tool</a></div>
-        <div class="tool-card"><h3>Scraper Sanity Checker</h3><a href="scraper-sanity.html">Open Tool</a></div>
-        <div class="tool-card"><h3>ThreeUI Component Catalog</h3><a href="threeui-generator.html">Open Tool</a></div>
-        <div class="tool-card"><h3>GPU Cluster Calculator</h3><a href="gpu-calculator.html">Open Tool</a></div>
-        <div class="tool-card"><h3>Grok Bot Config Optimizer</h3><a href="grok-optimizer.html">Open Tool</a></div>
-        <div class="tool-card"><h3>Human Atlas Metadata Generator</h3><a href="human-atlas-gen.html">Open Tool</a></div>
+    <div class="container">
+        <h1>Developer Productivity Factory</h1>
+        <p>A suite of lightweight, zero-dependency, free developer micro-tools and utility generators.</p>
+        <input type="text" id="search" class="search-box" placeholder="Search tools by name..." onkeyup="filterTools()">
+        <div class="tool-grid" id="toolList">
+            <div class="tool-card"><h3>LLM System Prompt Builder</h3><a href="system-prompt-builder.html">Open Tool</a></div>
+            <div class="tool-card"><h3>M3E Design-to-Code Exporter</h3><a href="m3e-exporter.html">Open Tool</a></div>
+            <div class="tool-card"><h3>LLM Tool-Schema Generator</h3><a href="tool-schema-gen.html">Open Tool</a></div>
+            <div class="tool-card"><h3>PRAXIST Agentic Flow Visualizer</h3><a href="praxist-visualizer.html">Open Tool</a></div>
+            <div class="tool-card"><h3>PRAXIST Pipeline Config Generator</h3><a href="praxist-config-gen.html">Open Tool</a></div>
+            <div class="tool-card"><h3>M3E Prompt Structured Exporter</h3><a href="m3e-exporter.html">Open Tool</a></div>
+            <div class="tool-card"><h3>PRAXIST Task Validator</h3><a href="praxist-validator.html">Open Tool</a></div>
+            <div class="tool-card"><h3>OSS README Generator</h3><a href="oss-readme-gen.html">Open Tool</a></div>
+            <div class="tool-card"><h3>DSH Plugin Validator</h3><a href="dsh-validator.html">Open Tool</a></div>
+            <div class="tool-card"><h3>JSON to TS Converter</h3><a href="json-to-ts.html">Open Tool</a></div>
+            <div class="tool-card"><h3>cURL to Code Converter</h3><a href="curl-to-code.html">Open Tool</a></div>
+            <div class="tool-card"><h3>Bounty Honeypot Checker</h3><a href="bounty-honeypot-checker.html">Open Tool</a></div>
+            <div class="tool-card"><h3>MCP Server Config Generator</h3><a href="mcp-config-gen.html">Open Tool</a></div>
+            <div class="tool-card"><h3>M3E Prompt Orchestrator</h3><a href="m3e-orchestrator.html">Open Tool</a></div>
+            <div class="tool-card"><h3>Scraper Sanity Checker</h3><a href="scraper-sanity.html">Open Tool</a></div>
+            <div class="tool-card"><h3>ThreeUI Component Catalog</h3><a href="threeui-generator.html">Open Tool</a></div>
+            <div class="tool-card"><h3>GPU Cluster Calculator</h3><a href="gpu-calculator.html">Open Tool</a></div>
+            <div class="tool-card"><h3>Grok Bot Config Optimizer</h3><a href="grok-optimizer.html">Open Tool</a></div>
+            <div class="tool-card"><h3>Human Atlas Metadata Generator</h3><a href="human-atlas-gen.html">Open Tool</a></div>
+            <div class="tool-card"><h3>Cost Calculator</h3><a href="cost-calculator.html">Open Tool</a></div>
+            <div class="tool-card"><h3>DSH Boilerplate</h3><a href="dsh-boilerplate.html">Open Tool</a></div>
+            <div class="tool-card"><h3>DSH Dependency Visualizer</h3><a href="dsh-dependency-visualizer.html">Open Tool</a></div>
+            <div class="tool-card"><h3>DSH Idea Generator</h3><a href="dsh-idea-generator.html">Open Tool</a></div>
+            <div class="tool-card"><h3>Agent Skill Generator</h3><a href="agent-skill-generator.html">Open Tool</a></div>
+            <div class="tool-card"><h3>Agent Stack Visualizer</h3><a href="agent-stack-visualizer.html">Open Tool</a></div>
+            <div class="tool-card"><h3>AI Key Validator</h3><a href="ai-key-validator.html">Open Tool</a></div>
+            <div class="tool-card"><h3>Claude Workflow Gen</h3><a href="claude-workflow-gen.html">Open Tool</a></div>
+            <div class="tool-card"><h3>Huashu Validator</h3><a href="huashu-validator.html">Open Tool</a></div>
+        </div>
     </div>
-    <script>function filterTools() { const query = document.getElementById('search').value.toLowerCase(); document.querySelectorAll('.tool-card').forEach(card => { card.style.display = card.innerText.toLowerCase().includes(query) ? 'block' : 'none'; }); }</script>
+    <script>
+        function filterTools() {
+            const query = document.getElementById('search').value.toLowerCase();
+            document.querySelectorAll('.tool-card').forEach(card => {
+                card.style.display = card.innerText.toLowerCase().includes(query) ? 'flex' : 'none';
+            });
+        }
+    </script>
 </body>
 </html>
