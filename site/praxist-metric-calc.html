@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PRAXIST Research Metric Calculator</title>
+  <style>body { font-family: sans-serif; padding: 20px; line-height: 1.6; max-width: 800px; margin: auto; } input, button { display: block; margin: 10px 0; padding: 10px; width: 100%; }</style>
+</head>
+<body>
+  <h1>PRAXIST Research Metric Calculator</h1>
+  <p>Calculate your research execution efficiency.</p>
+  <input type="number" id="tasks" placeholder="Total Tasks Defined">
+  <input type="number" id="completed" placeholder="Tasks Successfully Executed">
+  <button onclick="calculate()">Calculate Efficiency</button>
+  <div id="result"></div>
+  <script>
+    function calculate() {
+      const t = document.getElementById('tasks').value;
+      const c = document.getElementById('completed').value;
+      document.getElementById('result').innerText = 'Efficiency: ' + ((c/t)*100).toFixed(2) + '%';
+    }
+  </script>
+</body>
+</html>
