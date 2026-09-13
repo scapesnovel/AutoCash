@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRAXIST Agent Evaluation Matrix Builder - Autonomous AI Research Tools</title>
+    <meta name="description" content="Free online configuration tool for building structured evaluation matrices and performance benchmarks for sapientinc/PRAXIST research agents.">
+    <style>
+        :root {
+            --bg: #0d1117;
+            --card: #161b22;
+            --border: #30363d;
+            --text: #c9d1d9;
+            --heading: #f0f6fc;
+            --accent: #58a6ff;
+            --accent-hover: #1f6feb;
+            --success: #238636;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+            line-height: 1.5;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        header {
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        h1 {
+            color: var(--heading);
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+        }
+        p.subtitle {
+            color: #8b949e;
+            margin: 0;
+        }
+        .card {
+            background-color: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: var(--heading);
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 8px 12px;
+            background-color: #010409;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text);
+            box-sizing: border-box;
+            font-family: monospace;
+        }
+        button {
+            background-color: var(--accent);
+            color: #ffffff;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: var(--accent-hover);
+        }
+        pre {
+            background-color: #010409;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            border: 1px solid var(--border);
+        }
+        .nav-link {
+            color: var(--accent);
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="nav-link">&larr; Back to Tool Suite Index</a>
+        <header>
+            <h1>PRAXIST Agent Evaluation Matrix Builder</h1>
+            <p class="subtitle">Design, configure, and export structured benchmark matrix JSON specs for sapientinc/PRAXIST agentic evaluations.</p>
+        </header>
+
+        <div class="card">
+            <h3>Matrix Parameters</h3>
+            <div class="form-group">
+                <label for="agentName">Agent Model / Name</label>
+                <input type="text" id="agentName" value="praxist-research-agent-v1" placeholder="e.g. praxist-research-agent-v1">
+            </div>
+            <div class="form-group">
+                <label for="evalDomain">Evaluation Domain</label>
+                <select id="evalDomain">
+                    <option value="autonomous_coding">Autonomous Coding & Repair</option>
+                    <option value="data_analysis">Data Analysis & Hypothesis Testing</option>
+                    <option value="literature_synthesis">Literature Synthesis & Mining</option>
+                    <option value="multi_step_reasoning">Multi-Step Task Execution</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="metrics">Primary Evaluation Metrics (comma separated)</label>
+                <input type="text" id="metrics" value="exec_pass_rate, reasoning_efficiency, output_accuracy_score">
+            </div>
+            <div class="form-group">
+                <label for="timeout">Timeout per Run (seconds)</label>
+                <input type="number" id="timeout" value="300">
+            </div>
+            <button onclick="generateMatrix()">Generate JSON Matrix</button>
+        </div>
+
+        <div class="card">
+            <h3>Generated Matrix Spec</h3>
+            <pre id="jsonOutput">// Click generate to display JSON evaluation matrix</pre>
+        </div>
+    </div>
+
+    <script>
+        function generateMatrix() {
+            const agentName = document.getElementById('agentName').value || 'praxist-agent';
+            const evalDomain = document.getElementById('evalDomain').value;
+            const metrics = document.getElementById('metrics').value.split(',').map(m => m.trim());
+            const timeout = parseInt(document.getElementById('timeout').value, 10) || 300;
+
+            const config = {
+                evaluation_matrix: {
+                    version: "1.0.0",
+                    target_agent: agentName,
+                    domain: evalDomain,
+                    execution_environment: {
+                        container_image: "praxist/eval-runner:latest",
+                        timeout_seconds: timeout,
+                        gpu_required: false
+                    },
+                    scoring_rubric: metrics.reduce((acc, m) => {
+                        acc[m] = { weight: (1 / metrics.length).toFixed(2), required: true };
+                        return acc;
+                    }, {}),
+                    created_at: new Date().toISOString()
+                }
+            };
+
+            document.getElementById('jsonOutput').textContent = JSON.stringify(config, null, 2);
+        }
+    </script>
+</body>
+</html>
