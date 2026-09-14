@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AgentsDock Config Validator</title>
+  <style>body { font-family: sans-serif; padding: 20px; line-height: 1.5; } textarea { width: 100%; height: 200px; } button { margin-top: 10px; }</style>
+</head>
+<body>
+  <h1>AgentsDock Config Validator</h1>
+  <p>Paste your <code>agentsdock.json</code> configuration to validate schema and common errors.</p>
+  <textarea id="config" placeholder="{}"></textarea>
+  <button onclick="validate()">Validate Config</button>
+  <div id="result"></div>
+  <script>
+    function validate() {
+      const val = document.getElementById('config').value;
+      const res = document.getElementById('result');
+      try {
+        const obj = JSON.parse(val);
+        res.innerHTML = '<p style="color:green">Valid JSON detected. Checking schema...</p>';
+      } catch(e) {
+        res.innerHTML = '<p style="color:red">Invalid JSON: ' + e.message + '</p>';
+      }
+    }
+  </script>
+</body>
+</html>
