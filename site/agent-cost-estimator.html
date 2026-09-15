@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head><title>Agentic Workflow Token Cost Estimator</title></head>
+<body>
+<h1>Agentic Workflow Token Cost Estimator</h1>
+<p>Estimate the token costs for your multi-agent system workflows.</p>
+<script>
+function calculateCost() {
+  const tokens = document.getElementById('tokens').value;
+  const rate = document.getElementById('rate').value;
+  document.getElementById('result').innerText = 'Estimated Cost: $' + (tokens * rate / 1000000).toFixed(6);
+}
+</script>
+<input type="number" id="tokens" placeholder="Total Tokens (e.g. 500000)">
+<input type="number" id="rate" placeholder="Cost per 1M tokens (e.g. 3.00)">
+<button onclick="calculateCost()">Calculate</button>
+<p id="result"></p>
+</body>
+</html>
