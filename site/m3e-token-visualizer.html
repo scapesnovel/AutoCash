@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M3E Design Token Visualizer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>M3E Design Token Visualizer</h1>
+    <p>Visualize your M3E design tokens instantly.</p>
+    <textarea id="input" placeholder="Paste M3E token JSON here..."></textarea>
+    <button onclick="visualize()">Visualize</button>
+    <div id="output"></div>
+    <script>
+        function visualize() {
+            const input = document.getElementById('input').value;
+            try {
+                const data = JSON.parse(input);
+                document.getElementById('output').innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+            } catch(e) { alert('Invalid JSON'); }
+        }
+    </script>
+</body>
+</html>
