@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agentic Workflow Cost Estimator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Agentic Workflow Cost Estimator</h1>
+    <p>Estimate token costs for your recursive agent chains.</p>
+    <input type="number" id="tokens" placeholder="Avg tokens per step">
+    <input type="number" id="steps" placeholder="Number of steps">
+    <button onclick="calculate()">Calculate</button>
+    <p id="result"></p>
+    <script>
+        function calculate() {
+            const t = document.getElementById('tokens').value;
+            const s = document.getElementById('steps').value;
+            document.getElementById('result').textContent = 'Estimated cost: ' + (t * s * 0.000003).toFixed(6) + ' USD';
+        }
+    </script>
+</body>
+</html>

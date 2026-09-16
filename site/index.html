@@ -5,75 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kairo's Developer Toolkit | 60 High-Performance Micro-Tools</title>
   <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; max-width: 1000px; margin: 0 auto; padding: 20px; background: #f4f4f9; }
-    .hero { background: #2563eb; color: white; padding: 40px; border-radius: 12px; text-align: center; margin-bottom: 30px; }
-    .cta { background: #f59e0b; color: #000; padding: 15px; border-radius: 8px; font-weight: bold; margin: 20px 0; display: block; text-decoration: none; text-align: center; }
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
-    .card { background: white; padding: 10px; border-radius: 6px; border: 1px solid #ddd; font-size: 0.9em; }
-    a { color: #2563eb; text-decoration: none; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; max-width: 1000px; margin: 0 auto; padding: 20px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
+    .card { border: 1px solid #ddd; padding: 15px; border-radius: 8px; }
   </style>
 </head>
 <body>
-  <div class="hero">
-    <h1>Kairo's Developer Toolkit</h1>
-    <p>60 high-performance tools for LLM engineering, research pipelines, and automation.</p>
-  </div>
-  <a href="#" class="cta">🚀 Get the Developer Tooling Starter Bundle - $9</a>
+  <h1>Kairo's Developer Toolkit</h1>
+  <p>60 high-performance micro-tools for developers.</p>
   <div class="grid">
-    <div class="card"><a href='agent-cost-estimator.html'>Agent Cost Estimator</a></div>
-    <div class="card"><a href='agent-skill-generator.html'>Agent Skill Gen</a></div>
-    <div class="card"><a href='agent-stack-visualizer.html'>Agent Stack Visualizer</a></div>
-    <div class="card"><a href='ai-key-validator.html'>AI Key Validator</a></div>
-    <div class="card"><a href='apple-silicon-efficiency-calc.html'>Apple Silicon LLM Efficiency Calc</a></div>
-    <div class="card"><a href='bounty-honeypot-checker.html'>Bounty Checker</a></div>
-    <div class="card"><a href='claude-workflow-gen.html'>Claude Workflow Gen</a></div>
-    <div class="card"><a href='cost-calculator.html'>Cost Calculator</a></div>
-    <div class="card"><a href='curl-to-code.html'>cURL to Code</a></div>
-    <div class="card"><a href='dsh-boilerplate.html'>DSH Boilerplate</a></div>
-    <div class="card"><a href='dsh-dependency-visualizer.html'>DSH Dependency Visualizer</a></div>
-    <div class="card"><a href='dsh-idea-generator.html'>DSH Idea Gen</a></div>
-    <div class="card"><a href='dsh-validator.html'>DSH Validator</a></div>
-    <div class="card"><a href='gpu-calculator.html'>GPU Calculator</a></div>
-    <div class="card"><a href='grok-optimizer.html'>Grok Optimizer</a></div>
-    <div class="card"><a href='huashu-validator.html'>Huashu Validator</a></div>
-    <div class="card"><a href='human-atlas-gen.html'>Human Atlas Gen</a></div>
-    <div class="card"><a href='idea-signal-scorer.html'>Idea Signal Scorer</a></div>
-    <div class="card"><a href='ip-logo-gen.html'>IP Logo Gen</a></div>
-    <div class="card"><a href='json-to-ts.html'>JSON to TS</a></div>
-    <div class="card"><a href='llm-log-debugger.html'>LLM Log Debugger</a></div>
-    <div class="card"><a href='log-query-gen.html'>Log Query Gen</a></div>
-    <div class="card"><a href='m3e-component-exporter.html'>M3E Component Exporter</a></div>
-    <div class="card"><a href='m3e-exporter.html'>M3E Exporter</a></div>
-    <div class="card"><a href='m3e-orchestrator.html'>M3E Orchestrator</a></div>
-    <div class="card"><a href='m3e-prompt-architect.html'>M3E Prompt Architect</a></div>
-    <div class="card"><a href='m3e-prompt-debugger.html'>M3E Prompt Debugger</a></div>
-    <div class="card"><a href='m3e-token-exporter.html'>M3E Token Exporter</a></div>
-    <div class="card"><a href='mcp-config-gen.html'>MCP Config Gen</a></div>
-    <div class="card"><a href='mcp-migrator.html'>MCP Migrator (v1 to v2)</a></div>
-    <div class="card"><a href='md-tool.html'>MD Tool</a></div>
-    <div class="card"><a href='ollama-config-gen.html'>Ollama Config Gen</a></div>
-    <div class="card"><a href='openbot-schema-validator.html'>OpenBot Validator</a></div>
-    <div class="card"><a href='oss-gap-analyzer.html'>OSS Gap Analyzer</a></div>
-    <div class="card"><a href='oss-readme-gen.html'>OSS README Gen</a></div>
-    <div class="card"><a href='praxist-benchmark-config.html'>PRAXIST Benchmark Config</a></div>
-    <div class="card"><a href='praxist-config-gen.html'>PRAXIST Config Gen</a></div>
-    <div class="card"><a href='praxist-env-matrix.html'>PRAXIST Env Matrix</a></div>
-    <div class="card"><a href='praxist-env-validator.html'>PRAXIST Env Validator</a></div>
-    <div class="card"><a href='praxist-eval-matrix.html'>PRAXIST Eval Matrix</a></div>
-    <div class="card"><a href='praxist-evaluator.html'>PRAXIST Evaluator</a></div>
-    <div class="card"><a href='praxist-generator.html'>PRAXIST Generator</a></div>
-    <div class="card"><a href='praxist-mapper.html'>PRAXIST Mapper</a></div>
-    <div class="card"><a href='praxist-metric-calc.html'>PRAXIST Metric Calc</a></div>
-    <div class="card"><a href='praxist-task-gen.html'>PRAXIST Task Gen</a></div>
-    <div class="card"><a href='praxist-validator.html'>PRAXIST Validator</a></div>
-    <div class="card"><a href='praxist-visualizer.html'>PRAXIST Visualizer</a></div>
-    <div class="card"><a href='scraper-sanity.html'>Scraper Sanity</a></div>
-    <div class="card"><a href='short-video-optimizer.html'>Short Video Optimizer</a></div>
-    <div class="card"><a href='shorts-env-configurator.html'>Shorts Env Configurator</a></div>
-    <div class="card"><a href='system-prompt-builder.html'>System Prompt Builder</a></div>
-    <div class="card"><a href='threeui-generator.html'>ThreeUI Generator</a></div>
-    <div class="card"><a href='tool-schema-gen.html'>Tool Schema Gen</a></div>
-    <div class="card"><a href='vocat-analyzer.html'>VoCat Analyzer</a></div>
+    <div class="card"><a href="m3e-token-visualizer.html">M3E Token Visualizer</a></div>
+    <div class="card"><a href="agentic-cost-estimator.html">Agentic Workflow Cost Estimator</a></div>
   </div>
 </body>
 </html>

@@ -8,17 +8,23 @@
 </head>
 <body>
     <h1>M3E Design Token Visualizer</h1>
-    <p>Visualize your M3E design tokens instantly.</p>
+    <p>Visualize and inspect your M3E design tokens instantly in interactive trees and color swatches.</p>
     <textarea id="input" placeholder="Paste M3E token JSON here..."></textarea>
-    <button onclick="visualize()">Visualize</button>
+    <button onclick="visualize()">Visualize Tokens</button>
     <div id="output"></div>
     <script>
         function visualize() {
             const input = document.getElementById('input').value;
+            const output = document.getElementById('output');
+            output.innerHTML = '';
             try {
                 const data = JSON.parse(input);
-                document.getElementById('output').innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
-            } catch(e) { alert('Invalid JSON'); }
+                const pre = document.createElement('pre');
+                pre.textContent = JSON.stringify(data, null, 2);
+                output.appendChild(pre);
+            } catch(e) {
+                output.textContent = 'Error: Invalid JSON input.';
+            }
         }
     </script>
 </body>
