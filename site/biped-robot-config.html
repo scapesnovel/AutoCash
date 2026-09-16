@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RL Biped Robot Kinematics & Servo Configurator</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-color: #f8fafc;
+            --accent-color: #38bdf8;
+            --accent-hover: #0284c7;
+            --border-color: #334155;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container {
+            max-width: 800px;
+            width: 100%;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        h1 {
+            color: var(--accent-color);
+            margin-bottom: 10px;
+        }
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            color: var(--text-color);
+            box-sizing: border-box;
+        }
+        button {
+            background-color: var(--accent-color);
+            color: #000;
+            font-weight: bold;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.2s;
+        }
+        button:hover {
+            background-color: var(--accent-hover);
+        }
+        pre {
+            background-color: var(--bg-color);
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+            border: 1px solid var(--border-color);
+        }
+        .nav-link {
+            color: var(--accent-color);
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="nav-link">&larr; Back to Tools Suite</a>
+        <header>
+            <h1>RL Biped Robot Kinematics & Servo Configurator</h1>
+            <p>Generate configuration files and compute kinematics for RL-powered compact biped robots.</p>
+        </header>
+
+        <div class="card">
+            <h2>Leg Geometry & Servo Parameters</h2>
+            <div class="form-group">
+                <label for="thighLength">Thigh Length (mm):</label>
+                <input type="number" id="thighLength" value="80">
+            </div>
+            <div class="form-group">
+                <label for="shinLength">Shin Length (mm):</label>
+                <input type="number" id="shinLength" value="85">
+            </div>
+            <div class="form-group">
+                <label for="robotMass">Total Mass (g):</label>
+                <input type="number" id="robotMass" value="450">
+            </div>
+            <div class="form-group">
+                <label for="servoTorque">Servo Rated Torque (kg·cm):</label>
+                <input type="number" id="servoTorque" value="2.5" step="0.1">
+            </div>
+            <button onclick="generateConfig()">Calculate & Generate Config</button>
+        </div>
+
+        <div class="card">
+            <h2>Config Output & Kinematics Summary</h2>
+            <div id="summary">Press calculate to generate summary...</div>
+            <h3>Generated JSON Config:</h3>
+            <pre id="jsonOutput">// Config JSON will appear here</pre>
+        </div>
+    </div>
+
+    <script>
+        function generateConfig() {
+            const thigh = parseFloat(document.getElementById('thighLength').value);
+            const shin = parseFloat(document.getElementById('shinLength').value);
+            const mass = parseFloat(document.getElementById('robotMass').value);
+            const torque = parseFloat(document.getElementById('servoTorque').value);
+
+            const maxReach = thigh + shin;
+            const requiredTorque = (mass / 1000) * (maxReach / 100); // rough estimation in kg*cm
+            const torqueMargin = ((torque - requiredTorque) / torque * 100).toFixed(1);
+
+            const summaryHTML = `
+                <p><strong>Max Reachable Leg Length:</strong> ${maxReach} mm</p>
+                <p><strong>Est. Max Knee Torque Required:</strong> ${requiredTorque.toFixed(2)} kg·cm</p>
+                <p><strong>Servo Torque Safety Margin:</strong> ${torqueMargin}% ${torqueMargin < 0 ? '<span style="color: red;">(Underpowered!)</span>' : '<span style="color: green;">(Sufficient)</span>'}</p>
+            `;
+            document.getElementById('summary').innerHTML = summaryHTML;
+
+            const config = {
+                robot_type: "biped_rl",
+                geometry: {
+                    thigh_mm: thigh,
+                    shin_mm: shin,
+                    total_reach_mm: maxReach
+                },
+                mass_g: mass,
+                servos: {
+                    rated_torque_kgcm: torque,
+                    required_max_torque_kgcm: parseFloat(requiredTorque.toFixed(2)),
+                    safety_margin_percent: parseFloat(torqueMargin)
+                },
+                control_loop_hz: 50,
+                rl_observation_space: [
+                    "joint_positions",
+                    "joint_velocities",
+                    "body_orientation_quat",
+                    "body_angular_velocity"
+                ]
+            };
+
+            document.getElementById('jsonOutput').textContent = JSON.stringify(config, null, 2);
+        }
+    </script>
+</body>
+</html>
