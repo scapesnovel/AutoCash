@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SoL-Pi Auto-Research Loop Configurator | Free Developer Tool</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; background: #0f172a; color: #f8fafc; }
+        h1 { font-size: 1.8rem; color: #38bdf8; }
+        .card { background: #1e293b; border-radius: 8px; padding: 20px; margin-top: 20px; border: 1px solid #334155; }
+        label { display: block; margin-top: 15px; font-weight: 600; color: #94a3b8; }
+        input, select, textarea { width: 100%; padding: 10px; margin-top: 5px; border-radius: 6px; border: 1px solid #475569; background: #0f172a; color: #fff; box-sizing: border-box; }
+        button { background: #0284c7; color: white; border: none; padding: 12px 20px; font-size: 1rem; border-radius: 6px; cursor: pointer; margin-top: 20px; width: 100%; font-weight: bold; }
+        button:hover { background: #0369a1; }
+        pre { background: #020617; padding: 15px; border-radius: 6px; overflow-x: auto; border: 1px solid #1e293b; color: #38bdf8; margin-top: 15px; }
+    </style>
+</head>
+<body>
+    <h1>SoL-Pi Auto-Research Loop Configurator</h1>
+    <p style="color: #94a3b8;">Configure scaling parameters, loss thresholds, and agent harnesses for NVlabs/SoL-Pi auto-research execution.</p>
+    
+    <div class="card">
+        <label for="experimentName">Experiment Name</label>
+        <input type="text" id="experimentName" value="sol-pi-loop-v1">
+        
+        <label for="maxIterations">Max Research Iterations</label>
+        <input type="number" id="maxIterations" value="50">
+        
+        <label for="evalMetric">Primary Evaluation Metric</label>
+        <select id="evalMetric">
+            <option value="accuracy">Accuracy / Score</option>
+            <option value="loss">Validation Loss</option>
+            <option value="latency">Inference Latency</option>
+        </select>
+        
+        <label for="agentModel">Harness Agent Model</label>
+        <input type="text" id="agentModel" value="gpt-4o-2024-08-06">
+        
+        <button onclick="generateConfig()">Generate SoL-Pi JSON Config</button>
+        
+        <label>Generated Configuration</label>
+        <pre id="output">// Click generate to produce JSON configuration</pre>
+    </div>
+
+    <script>
+        function generateConfig() {
+            const config = {
+                experiment_name: document.getElementById('experimentName').value,
+                harness: {
+                    model: document.getElementById('agentModel').value,
+                    type: "auto-research-loop",
+                    scaling_policy: "proportional"
+                },
+                loop_parameters: {
+                    max_iterations: parseInt(document.getElementById('maxIterations').value, 10),
+                    eval_metric: document.getElementById('evalMetric').value,
+                    checkpoint_frequency: 5,
+                    early_stopping_patience: 3
+                },
+                metadata: {
+                    generated_by: "SoL-Pi Auto-Research Loop Configurator",
+                    timestamp: new Date().toISOString()
+                }
+            };
+            document.getElementById('output').textContent = JSON.stringify(config, null, 2);
+        }
+    </script>
+</body>
+</html>
