@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Browser-Use DOM Selector & XPath Generator</title>
+<style>body{font-family:sans-serif;padding:20px;line-height:1.6;} input, button{padding:10px;margin:5px 0;width:100%;} pre{background:#f4f4f4;padding:10px;}</style>
+</head>
+<body>
+<h1>Browser-Use DOM Selector & XPath Generator</h1>
+<p>Generate precise XPath/CSS selectors for browser-use automation.</p>
+<input type='text' id='tag' placeholder='HTML Tag (e.g., button)'>
+<input type='text' id='attr' placeholder='Attribute (e.g., id)'>
+<input type='text' id='val' placeholder='Value (e.g., submit-btn)'>
+<button onclick='generate()'>Generate Selector</button>
+<pre id='out'></pre>
+<script>
+function generate(){ 
+  const tag = document.getElementById('tag').value || '*';
+  const attr = document.getElementById('attr').value;
+  const val = document.getElementById('val').value;
+  const xpath = attr ? `//${tag}[@${attr}='${val}']` : `//${tag}`;
+  document.getElementById('out').innerText = xpath;
+}
+</script>
+</body>
+</html>
