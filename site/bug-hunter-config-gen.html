@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agentic Bug-Hunter Target Pipeline Generator</title>
+  <meta name="description" content="Generate, customize, and validate target pipelines and security execution profiles for Agentic-Bug-Hunter workflows.">
+  <style>
+    :root {
+      --bg-color: #0f172a;
+      --card-bg: #1e293b;
+      --accent-color: #38bdf8;
+      --text-color: #f8fafc;
+      --text-muted: #94a3b8;
+      --border-color: #334155;
+    }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      margin: 0;
+      padding: 0;
+      line-height: 1.5;
+    }
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+    header {
+      margin-bottom: 2rem;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 1rem;
+    }
+    h1 {
+      font-size: 1.875rem;
+      margin: 0 0 0.5rem 0;
+      color: var(--accent-color);
+    }
+    p {
+      color: var(--text-muted);
+      margin: 0;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+    @media (max-width: 768px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 0.5rem;
+      padding: 1.5rem;
+    }
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+    label {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 0.625rem;
+      background-color: var(--bg-color);
+      border: 1px solid var(--border-color);
+      border-radius: 0.375rem;
+      color: var(--text-color);
+      box-sizing: border-box;
+      font-family: monospace;
+    }
+    button {
+      background-color: var(--accent-color);
+      color: #0f172a;
+      font-weight: 600;
+      border: none;
+      padding: 0.625rem 1.25rem;
+      border-radius: 0.375rem;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    button:hover {
+      opacity: 0.9;
+    }
+    pre {
+      background-color: var(--bg-color);
+      border: 1px solid var(--border-color);
+      padding: 1rem;
+      border-radius: 0.375rem;
+      overflow-x: auto;
+      font-family: monospace;
+      color: #a5f3fc;
+      white-space: pre-wrap;
+    }
+    .nav-link {
+      display: inline-block;
+      margin-bottom: 1rem;
+      color: var(--accent-color);
+      text-decoration: none;
+    }
+    .nav-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="/index.html" class="nav-link">&larr; Back to Tools Suite</a>
+    <header>
+      <h1>Agentic Bug-Hunter Target Pipeline Generator</h1>
+      <p>Configure automated target profiles, rate limits, and vulnerability scan scopes for Agentic-Bug-Hunter runs.</p>
+    </header>
+    <div class="grid">
+      <div class="card">
+        <h3>Pipeline Settings</h3>
+        <div class="form-group">
+          <label for="targetDomain">Target Domain/Scope</label>
+          <input type="text" id="targetDomain" value="example.com">
+        </div>
+        <div class="form-group">
+          <label for="scanDepth">Scan Depth / Intensity</label>
+          <select id="scanDepth">
+            <option value="passive">Passive (Recon Only)</option>
+            <option value="standard" selected>Standard (Active + Recon)</option>
+            <option value="deep">Deep (Exhaustive Fuzzing)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="maxThreads">Max Concurrent Threads</label>
+          <input type="number" id="maxThreads" value="10" min="1" max="100">
+        </div>
+        <div class="form-group">
+          <label for="moduleScope">Target Modules</label>
+          <input type="text" id="moduleScope" value="subdomains, headers, open_ports, takeovers, xss">
+        </div>
+        <button onclick="generateConfig()">Generate Pipeline YAML</button>
+      </div>
+      <div class="card">
+        <h3>Generated Pipeline Spec</h3>
+        <pre id="outputSpec"># Config will appear here after clicking Generate</pre>
+      </div>
+    </div>
+  </div>
+  <script>
+    function generateConfig() {
+      const domain = document.getElementById('targetDomain').value || 'example.com';
+      const depth = document.getElementById('scanDepth').value;
+      const threads = document.getElementById('maxThreads').value || 10;
+      const modules = document.getElementById('moduleScope').value.split(',').map(m => m.trim());
+      
+      const yaml = `version: "1.0"
+target:
+  domain: "${domain}"
+  intensity: "${depth}"
+ execution:
+  max_threads: ${threads}
+  timeout_seconds: 300
+modules:
+${modules.map(m => `  - name: "${m}"\n    enabled: true`).join('\n')}
+reporting:
+  output_format: "json"
+  alert_threshold: "medium"
+`;
+      document.getElementById('outputSpec').textContent = yaml;
+    }
+    // Initial generation
+    generateConfig();
+  </script>
+</body>
+</html>
