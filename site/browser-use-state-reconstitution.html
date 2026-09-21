@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browser-Use State Reconstitution Utility - L32 Factory</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; padding: 20px; max-width: 800px; margin: 0 auto; color: #333; }
+        h1 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        textarea { width: 100%; height: 150px; margin-bottom: 150px; font-family: monospace; font-size: 13px; padding: 10px; border: 1px solid #ccc; border-radius: 4px; }
+        button { background: #3498db; color: #fff; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-size: 16px; }
+        button:hover { background: #2980b9; }
+        #output { margin-top: 20px; background: #f8f9fa; padding: 15px; border-radius: 4px; border: 1px solid #e9ecef; white-space: pre-wrap; font-family: monospace; }
+    </style>
+</head>
+<body>
+    <h1>Browser-Use State Reconstitution Utility</h1>
+    <p>Reconstruct and inspect execution state vectors from raw `jev-ultrafast` trace output.</p>
+    <label for="traceInput"><strong>Paste Trace Log / Execution Context JSON:</strong></label>
+    <textarea id="traceInput" placeholder='{"step": 12, "dom_mutation_count": 45, "active_element": "input#submit", "pending_events": []}'></textarea>
+    <button onclick="reconstructState()">Reconstruct State</button>
+
+    <h3>Reconstituted State Profile:</h3>
+    <div id="output">Awaiting trace payload...</div>
+
+    <script>
+        function reconstructState() {
+            const input = document.getElementById('traceInput').value;
+            const output = document.getElementById('output');
+            try {
+                const parsed = JSON.parse(input);
+                const reconstituted = {
+                    reconstitution_timestamp: new Date().toISOString(),
+                    step_id: parsed.step || 'Unknown',
+                    dom_complexity_score: (parsed.dom_mutation_count || 0) * 1.5,
+                    active_target: parsed.active_element || 'None',
+                    state_integrity: parsed.pending_events && parsed.pending_events.length === 0 ? 'CLEAN' : 'DIRTY_PENDING_EVENTS',
+                    recommended_action: parsed.active_element ? 'VERIFY_TARGET_ACCESSIBILITY' : 'WAIT_FOR_IDLE'
+                };
+                output.textContent = JSON.stringify(reconstituted, null, 2);
+            } catch (e) {
+                output.textContent = 'Error parsing state JSON: ' + e.message;
+            }
+        }
+    </script>
+</body>
+</html>
