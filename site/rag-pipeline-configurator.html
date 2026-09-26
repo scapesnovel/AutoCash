@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AI System Design RAG Pipeline Configurator</title>
+    <meta name="description" content="A free, zero-dependency tool for configuring RAG (Retrieval-Augmented Generation) pipelines for AI system design.">
+    <style>body { font-family: sans-serif; padding: 20px; line-height: 1.6; } .container { max-width: 800px; margin: auto; } input, textarea { width: 100%; padding: 8px; margin: 10px 0; }</style>
+</head>
+<body>
+    <div class="container">
+        <h1>RAG Pipeline Configurator</h1>
+        <p>Define your RAG pipeline architecture and export the configuration JSON.</p>
+        <label>Pipeline Name:</label>
+        <input type="text" id="pipelineName" placeholder="e.g., Enterprise-RAG-01">
+        <label>Embedding Model:</label>
+        <input type="text" id="model" placeholder="e.g., text-embedding-3-small">
+        <button onclick="generateConfig()">Generate Config</button>
+        <pre id="output"></pre>
+    </div>
+    <script>
+        function generateConfig() {
+            const config = {
+                pipeline: document.getElementById('pipelineName').value,
+                embeddingModel: document.getElementById('model').value,
+                timestamp: new Date().toISOString()
+            };
+            document.getElementById('output').textContent = JSON.stringify(config, null, 2);
+        }
+    </script>
+</body>
+</html>
