@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Insurance Agent Evaluation Matrix Generator</title>
+<link rel='stylesheet' href='style.css'>
+</head>
+<body>
+<h1>Insurance Agent Evaluation Matrix Generator</h1>
+<p>Configure your evaluation parameters for the Insurance Agent Benchmark.</p>
+<textarea id='config' placeholder='Enter evaluation schema (JSON)...'></textarea>
+<button onclick='generate()'>Generate Matrix</button>
+<pre id='output'></pre>
+<script>
+function generate() {
+  const config = document.getElementById('config').value;
+  document.getElementById('output').innerText = 'Generated Matrix for: ' + config;
+}
+</script>
+</body>
+</html>
