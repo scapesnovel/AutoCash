@@ -1,1 +1,28 @@
-<!DOCTYPE html><html><head><title>Laya Decision Schema Validator</title></head><body><h1>Laya Decision Schema Validator</h1><p>Validate your Laya decision schemas and scoring parameters instantly.</p><textarea id='schema' placeholder='Paste Laya schema here...'></textarea><button onclick='validate()'>Validate</button><script>function validate(){alert('Schema validation logic initialized.');}</script></body></html>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Laya Decision Schema Validator</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>body { font-family: sans-serif; padding: 20px; line-height: 1.6; } textarea { width: 100%; height: 200px; } button { padding: 10px 20px; margin-top: 10px; }</style>
+</head>
+<body>
+    <h1>Laya Decision Schema Validator</h1>
+    <p>Validate your typed choice, score, and yes/no decision schemas for Laya.</p>
+    <textarea id="schema" placeholder="Paste your Laya decision schema here..."></textarea>
+    <button onclick="validate()">Validate Schema</button>
+    <div id="result"></div>
+    <script>
+        function validate() {
+            const schema = document.getElementById('schema').value;
+            const result = document.getElementById('result');
+            try {
+                const parsed = JSON.parse(schema);
+                result.innerHTML = '<p style="color:green">Valid JSON schema detected. Ensure keys match Laya requirements (choice, score, yes/no).</p>';
+            } catch (e) {
+                result.innerHTML = '<p style="color:red">Invalid JSON: ' + e.message + '</p>';
+            }
+        }
+    </script>
+</body>
+</html>
