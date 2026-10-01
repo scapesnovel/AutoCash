@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCP Social Publishing Agent Schema Configurator - Free Online Tool</title>
+    <meta name="description" content="Interactive configuration tool for Model Context Protocol (MCP) social publishing agents. Generate valid JSON schemas, platform rate limits, and post rules.">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-weight: bold; margin-bottom: 5px; }
+        input, select, textarea { width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
+        button { background-color: #2b6cb0; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; }
+        button:hover { background-color: #2c5282; }
+        pre { background: #f4f4f4; padding: 15px; border-radius: 4px; overflow-x: auto; border: 1px solid #ddd; }
+        .header { margin-bottom: 25px; border-bottom: 2px solid #edf2f7; padding-bottom: 15px; }
+        .nav-link { font-size: 14px; margin-bottom: 10px; display: inline-block; color: #3182ce; text-decoration: none; }
+        .nav-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="nav-link">&larr; Back to Tool Suite</a>
+        <div class="header">
+            <h1>MCP Social Publishing Agent Schema Configurator</h1>
+            <p>Design, validate, and export Model Context Protocol (MCP) tool schemas and publishing rules for automated social media agents.</p>
+        </div>
+
+        <div class="form-group">
+            <label for="agentName">Agent Name / Identifier</label>
+            <input type="text" id="agentName" value="SocialPublisherAgent" placeholder="e.g., CrossPostAgent">
+        </div>
+
+        <div class="form-group">
+            <label for="platform">Target Platform</label>
+            <select id="platform">
+                <option value="devto">DEV.to (API / REST)</option>
+                <option value="bluesky">Bluesky / AT Protocol</option>
+                <option value="x-twitter">X (Twitter API v2)</option>
+                <option value="mastodon">Mastodon (ActivityPub)</option>
+                <option value="linkedin">LinkedIn Posts API</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="maxPostsPerDay">Max Daily Rate Limit</label>
+            <input type="number" id="maxPostsPerDay" value="5" min="1" max="100">
+        </div>
+
+        <div class="form-group">
+            <label for="requiresHumanApproval">Human Approval Required?</label>
+            <select id="requiresHumanApproval">
+                <option value="true">Yes - Human-in-the-loop mandatory</option>
+                <option value="false">No - Fully autonomous execution</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="mcpVersion">MCP Protocol Version</label>
+            <input type="text" id="mcpVersion" value="2024-11-05">
+        </div>
+
+        <button id="generateBtn">Generate MCP Schema JSON</button>
+
+        <h3>Generated MCP Tool Manifest</h3>
+        <pre id="outputCode">Click 'Generate MCP Schema JSON' to construct the manifest.</pre>
+    </div>
+
+    <script>
+        document.getElementById('generateBtn').addEventListener('click', function() {
+            const agentName = document.getElementById('agentName').value.trim() || 'SocialPublisherAgent';
+            const platform = document.getElementById('platform').value;
+            const maxPostsPerDay = parseInt(document.getElementById('maxPostsPerDay').value) || 5;
+            const requiresApproval = document.getElementById('requiresHumanApproval').value === 'true';
+            const mcpVersion = document.getElementById('mcpVersion').value.trim() || '2024-11-05';
+
+            const schema = {
+                "$schema": "https://modelcontextprotocol.io/schema/v1.json",
+                "mcpVersion": mcpVersion,
+                "name": agentName,
+                "description": `MCP Social Publishing Tool integration for ${platform}`,
+                "tools": [
+                    {
+                        "name": `publish_to_${platform.replace('-', '_')}`,
+                        "description": `Publish formatted content directly to ${platform} via MCP.`,
+                        "inputSchema": {
+                            "type": "object",
+                            "properties": {
+                                "title": { "type": "string", "description": "Post headline or title" },
+                                "body": { "type": "string", "description": "Main body text or markdown payload" },
+                                "tags": {
+                                    "type": "array",
+                                    "items": { "type": "string" },
+                                    "description": "Tags or hashtags for categorization"
+                                },
+                                "canonicalUrl": { "type": "string", "format": "uri", "description": "Original source URL for SEO tracking" }
+                            },
+                            "required": ["body"]
+                        },
+                        "policy": {
+                            "maxPostsPerDay": maxPostsPerDay,
+                            "humanApprovalRequired": requiresApproval,
+                            "platform": platform
+                        }
+                    }
+                ]
+            };
+
+            document.getElementById('outputCode').textContent = JSON.stringify(schema, null, 2);
+        });
+    </script>
+</body>
+</html>
