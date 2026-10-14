@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Machine Anatomy SVG Configurator</title>
+    <style>body { font-family: sans-serif; padding: 20px; line-height: 1.6; } .config-box { border: 1px solid #ccc; padding: 15px; border-radius: 8px; max-width: 600px; }</style>
+</head>
+<body>
+    <h1>Machine Anatomy SVG Configurator</h1>
+    <p>Configure your isometric machine visualization parameters for the <code>anatomy</code> agent skill.</p>
+    <div class="config-box">
+        <label>System Complexity: <input type="range" min="1" max="10" value="5"></label><br>
+        <label>Shader Effect: <select><option>WebGL</option><option>SVG-Static</option></select></label><br>
+        <button onclick="alert('Schema Generated!')">Generate Configuration</button>
+    </div>
+</body>
+</html>
