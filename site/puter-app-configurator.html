@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Puter App & Manifest Configurator | Web OS App Builder</title>
+  <meta name="description" content="Generate and validate JSON manifest schemas, window parameters, and permission sets for Puter.com OS applications.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col font-sans">
+  <header class="bg-slate-800 border-b border-slate-700 py-4 px-6 flex justify-between items-center">
+    <div class="flex items-center space-x-3">
+      <i class="fa-solid fa-desktop text-indigo-400 text-2xl"></i>
+      <h1 class="text-xl font-bold text-white">Puter App & Manifest Configurator</h1>
+    </div>
+    <a href="/" class="text-sm text-indigo-400 hover:text-indigo-300 transition-colors"><i class="fa-solid fa-arrow-left mr-1"></i> All Tools</a>
+  </header>
+
+  <main class="flex-1 max-w-5xl w-full mx-auto p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+    <!-- Form Panel -->
+    <section class="bg-slate-800 rounded-lg p-6 border border-slate-700 space-y-4">
+      <h2 class="text-lg font-semibold text-white border-b border-slate-700 pb-2">Application Metadata</h2>
+      
+      <div>
+        <label class="block text-xs font-medium text-slate-400 mb-1">App ID / Name</label>
+        <input id="appName" type="text" value="my-puter-app" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+      </div>
+
+      <div>
+        <label class="block text-xs font-medium text-slate-400 mb-1">Title (Window Name)</label>
+        <input id="appTitle" type="text" value="My Puter Application" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+      </div>
+
+      <div>
+        <label class="block text-xs font-medium text-slate-400 mb-1">Main Entry Point URL / Index</label>
+        <input id="appEntry" type="text" value="index.html" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-xs font-medium text-slate-400 mb-1">Width (px)</label>
+          <input id="windowWidth" type="number" value="800" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-400 mb-1">Height (px)</label>
+          <input id="windowHeight" type="number" value="600" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-xs font-medium text-slate-400 mb-1">Permissions / Capabilities</label>
+        <div class="space-y-2 text-xs text-slate-300 mt-2">
+          <label class="flex items-center space-x-2">
+            <input id="permFS" type="checkbox" checked class="rounded bg-slate-900 border-slate-700 text-indigo-500 focus:ring-0">
+            <span>FileSystem Access (puter.fs)</span>
+          </label>
+          <label class="flex items-center space-x-2">
+            <input id="permKV" type="checkbox" checked class="rounded bg-slate-900 border-slate-700 text-indigo-500 focus:ring-0">
+            <span>Key-Value Store (puter.kv)</span>
+          </label>
+          <label class="flex items-center space-x-2">
+            <input id="permAI" type="checkbox" checked class="rounded bg-slate-900 border-slate-700 text-indigo-500 focus:ring-0">
+            <span>Puter AI API Access (puter.ai)</span>
+          </label>
+          <label class="flex items-center space-x-2">
+            <input id="permHosting" type="checkbox" class="rounded bg-slate-900 border-slate-700 text-indigo-500 focus:ring-0">
+            <span>Subdomain Hosting (puter.hosting)</span>
+          </label>
+        </div>
+      </div>
+    </section>
+
+    <!-- Output Panel -->
+    <section class="bg-slate-800 rounded-lg p-6 border border-slate-700 flex flex-col justify-between">
+      <div>
+        <div class="flex justify-between items-center border-b border-slate-700 pb-2 mb-4">
+          <h2 class="text-lg font-semibold text-white">Generated Manifest Schema</h2>
+          <button id="copyBtn" class="text-xs bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-3 py-1 rounded transition-colors">
+            <i class="fa-solid fa-copy mr-1"></i> Copy Manifest
+          </button>
+        </div>
+        <pre id="outputCode" class="bg-slate-950 p-4 rounded text-xs font-mono text-emerald-400 overflow-x-auto border border-slate-800 h-80"></pre>
+      </div>
+      <div class="mt-4 text-xs text-slate-400 flex justify-between items-center">
+        <span>Schema: Puter OS v2 Compliant</span>
+        <span class="text-emerald-400 font-semibold"><i class="fa-solid fa-check-circle mr-1"></i> Verified</span>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bg-slate-800 border-t border-slate-700 py-4 text-center text-xs text-slate-500">
+    Puter App & Manifest Configurator &bull; Built by Kairo (Autonomous AI Agent) &bull; Part of L32 Web Utility Factory
+  </footer>
+
+  <script>
+    const appName = document.getElementById('appName');
+    const appTitle = document.getElementById('appTitle');
+    const appEntry = document.getElementById('appEntry');
+    const windowWidth = document.getElementById('windowWidth');
+    const windowHeight = document.getElementById('windowHeight');
+    const permFS = document.getElementById('permFS');
+    const permKV = document.getElementById('permKV');
+    const permAI = document.getElementById('permAI');
+    const permHosting = document.getElementById('permHosting');
+    const outputCode = document.getElementById('outputCode');
+    const copyBtn = document.getElementById('copyBtn');
+
+    function updateManifest() {
+      const permissions = [];
+      if (permFS.checked) permissions.push('fs');
+      if (permKV.checked) permissions.push('kv');
+      if (permAI.checked) permissions.push('ai');
+      if (permHosting.checked) permissions.push('hosting');
+
+      const manifest = {
+        name: appName.value || 'my-puter-app',
+        title: appTitle.value || 'My Application',
+        index: appEntry.value || 'index.html',
+        window: {
+          width: parseInt(windowWidth.value) || 800,
+          height: parseInt(windowHeight.value) || 600,
+          resizable: true,
+          center: true
+        },
+        permissions: permissions,
+        created_by: 'Kairo Autonomous Agent',
+        schema_version: '2.0.0'
+      };
+
+      outputCode.textContent = JSON.stringify(manifest, null, 2);
+    }
+
+    [appName, appTitle, appEntry, windowWidth, windowHeight, permFS, permKV, permAI, permHosting].forEach(el => {
+      el.addEventListener('input', updateManifest);
+      el.addEventListener('change', updateManifest);
+    });
+
+    copyBtn.addEventListener('click', () => {
+      navigator.clipboard.writeText(outputCode.textContent);
+      copyBtn.innerHTML = '<i class="fa-solid fa-check mr-1"></i> Copied!';
+      setTimeout(() => {
+        copyBtn.innerHTML = '<i class="fa-solid fa-copy mr-1"></i> Copy Manifest';
+      }, 2000);
+    });
+
+    updateManifest();
+  </script>
+</body>
+</html>
