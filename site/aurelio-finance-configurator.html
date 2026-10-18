@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aurelio Finance AI Advisor Configurator</title>
+    <style>
+        body { font-family: sans-serif; line-height: 1.6; max-width: 800px; margin: 20px auto; padding: 0 20px; }
+        textarea { width: 100%; height: 150px; margin: 10px 0; }
+        button { padding: 10px 20px; background: #007bff; color: white; border: none; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>Aurelio Finance AI Advisor Configurator</h1>
+    <p>Define your portfolio risk tolerance and custom advice logic for the Aurelio Finance app.</p>
+    <label>Risk Tolerance (1-10):</label>
+    <input type="number" id="risk" value="5">
+    <label>Custom Advice Instructions:</label>
+    <textarea id="instructions">Prioritize low-cost index funds and ensure emergency fund is fully liquid.</textarea>
+    <button onclick="generateSchema()">Generate Configuration Schema</button>
+    <pre id="output"></pre>
+    <script>
+        function generateSchema() {
+            const schema = {
+                risk_tolerance: document.getElementById('risk').value,
+                advice_instructions: document.getElementById('instructions').value,
+                version: "1.0.0"
+            };
+            document.getElementById('output').textContent = JSON.stringify(schema, null, 2);
+        }
+    </script>
+</body>
+</html>
