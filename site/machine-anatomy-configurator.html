@@ -1,1 +1,80 @@
-<!DOCTYPE html><html><head><title>Machine Anatomy SVG Configurator</title><meta charset='UTF-8'><style>body{font-family:sans-serif;padding:20px;} .config-box{border:1px solid #ccc;padding:15px;margin-top:10px;}</style></head><body><h1>Machine Anatomy SVG Configurator</h1><div class='config-box'><label>SVG Component ID:</label><input type='text' id='comp-id' placeholder='e.g., gear-01'><br><br><label>Path Complexity:</label><input type='range' id='complexity' min='1' max='10'><br><br><button onclick='generate()'>Export Config Schema</button></div><pre id='output'></pre><script>function generate(){const id=document.getElementById('comp-id').value;const c=document.getElementById('complexity').value;document.getElementById('output').textContent=JSON.stringify({component:id,complexity:c,timestamp:new Date().toISOString()},null,2);}</script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Machine Anatomy SVG Configurator - L32 Factory</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; margin: 0; padding: 20px; background: #f4f4f9; color: #333; }
+        .container { max-width: 800px; margin: auto; background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        h1 { border-bottom: 2px solid #0066cc; padding-bottom: 10px; color: #0066cc; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-weight: bold; margin-bottom: 5px; }
+        input[type="text"], select, textarea { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        textarea { height: 100px; font-family: monospace; }
+        button { background: #0066cc; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; font-size: 16px; }
+        button:hover { background: #0052a3; }
+        .output { margin-top: 20px; padding: 15px; background: #eef2f5; border-radius: 4px; font-family: monospace; white-space: pre-wrap; word-break: break-all; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Machine Anatomy SVG Configurator</h1>
+        <p>Generates structured JSON schema for <b>wheresryan22/anatomy</b> agent skills to render interactive isometric views of complex systems.</p>
+        <form id="configForm">
+            <div class="form-group">
+                <label for="systemName">System Name</label>
+                <input type="text" id="systemName" value="Quantum Core Processing Unit">
+            </div>
+            <div class="form-group">
+                <label for="perspective">Isometric Perspective</label>
+                <select id="perspective">
+                    <option value="iso-north-east">North-East (30° Angle)</option>
+                    <option value="iso-north-west">North-West (-30° Angle)</option>
+                    <option value="top-down-ortho">Top-Down Orthographic</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="components">System Components (Comma Separated)</label>
+                <input type="text" id="components" value="Cooling Loop, Logic Board, Power Module, Optic Interface">
+            </div>
+            <div class="form-group">
+                <label for="webgl">Enable WebGL Shader Enhancements</label>
+                <select id="webgl">
+                    <option value="true">Yes (Glow & Lighting Effects)</option>
+                    <option value="false">No (Flat Vector Only)</option>
+                </select>
+            </div>
+            <button type="button" onclick="generateConfig()">Generate Skill Schema</button>
+        </form>
+        <div class="output" id="output">Click 'Generate Skill Schema' to view JSON output...</div>
+        <p><a href="index.html">&larr; Back to L32 Tool Suite Index</a></p>
+    </div>
+    <script>
+        function generateConfig() {
+            const name = document.getElementById('systemName').value;
+            const perspective = document.getElementById('perspective').value;
+            const components = document.getElementById('components').value.split(',').map(c => c.trim());
+            const webgl = document.getElementById('webgl').value === 'true';
+            
+            const config = {
+                system: name,
+                render_engine: {
+                    type: "isometric-svg",
+                    perspective: perspective,
+                    webgl_effects: webgl
+                },
+                structure: components.map((comp, idx) => ({
+                    id: `node-${idx+1}`,
+                    label: comp,
+                    layer: idx + 1,
+                    interactive: true
+                }))
+            };
+            
+            document.getElementById('output').textContent = JSON.stringify(config, null, 2);
+        }
+    </script>
+</body>
+</html>
