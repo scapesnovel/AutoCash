@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>DataEase Data Source & Dashboard Schema Configurator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 text-white min-h-screen p-8">
+  <div class="max-w-4xl mx-auto bg-slate-800 p-6 rounded-xl shadow-xl border border-slate-700">
+    <h1 class="text-2xl font-bold mb-4 text-indigo-400">DataEase Data Source & Dashboard Schema Configurator</h1>
+    <p class="text-slate-300 text-sm mb-6">
+      Generate valid JSON connection definitions, query filters, and visualization panel schemas for <a href="https://github.com/dataease/dataease" target="_blank" class="text-indigo-400 underline">dataease/dataease</a> open-source BI deployments.
+    </p>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+      <div>
+        <label class="block text-xs uppercase font-bold text-slate-400 mb-2">Data Source Type</label>
+        <select id="dsType" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+          <option value="mysql">MySQL / MariaDB</option>
+          <option value="doris">Apache Doris</option>
+          <option value="pg">PostgreSQL</option>
+          <option value="clickhouse">ClickHouse</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-xs uppercase font-bold text-slate-400 mb-2">Refresh Sync Rate</label>
+        <select id="syncRate" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+          <option value="realtime">Real-time (Direct Query)</option>
+          <option value="5m">5 Minutes</option>
+          <option value="1h">Hourly Sync</option>
+          <option value="24h">Daily Scheduled Refresh</option>
+        </select>
+      </div>
+    </div>
+    <div class="mb-6">
+      <label class="block text-xs uppercase font-bold text-slate-400 mb-2">Dataset Query Filter Clause</label>
+      <input type="text" id="queryFilter" value="status = 'ACTIVE' AND created_at >= NOW() - INTERVAL 30 DAY" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm text-slate-200 focus:outline-none focus:border-indigo-500" />
+    </div>
+    <div class="mb-6">
+      <button onclick="generateConfig()" class="bg-indigo-600 hover:bg-indigo-500 px-4 py-2 rounded font-bold text-sm text-white transition-colors">Generate DataEase Config</button>
+    </div>
+    <div>
+      <label class="block text-xs uppercase font-bold text-slate-400 mb-2">DataEase Manifest Spec</label>
+      <textarea id="output" class="w-full bg-slate-900 border border-slate-700 rounded p-3 text-xs font-mono text-emerald-400 h-48 focus:outline-none" readonly></textarea>
+    </div>
+  </div>
+  <script>
+    function generateConfig() {
+      const type = document.getElementById('dsType').value;
+      const sync = document.getElementById('syncRate').value;
+      const filter = document.getElementById('queryFilter').value;
+      const spec = {
+        "version": "v2.0",
+        "datasource": {
+          "type": type,
+          "sync_mode": sync,
+          "pool_size": 10,
+          "timeout_ms": 5000
+        },
+        "dataset": {
+          "filter_clause": filter,
+          "cache_ttl_sec": sync === 'realtime' ? 0 : 300
+        },
+        "dashboard": {
+          "theme": "dark",
+          "panels": [
+            {
+              "id": "panel_kpi_total",
+              "type": "kpi",
+              "chart_title": "Active Records",
+              "aggregation": "COUNT(1)"
+            }
+          ]
+        }
+      };
+      document.getElementById('output').value = JSON.stringify(spec, null, 2);
+    }
+    generateConfig();
+  </script>
+</body>
+</html>
