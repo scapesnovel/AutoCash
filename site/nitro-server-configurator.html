@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nitro Server Configurator & Preset Schema Generator</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; line-height: 1.6; background: #0f172a; color: #e2e8f0; }
+        h1, h2 { color: #38bdf8; }
+        .card { background: #1e293b; padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #334155; }
+        label { display: block; margin-top: 10px; font-weight: bold; color: #94a3b8; }
+        input, select, textarea { width: 100%; padding: 8px; margin-top: 5px; border-radius: 4px; border: 1px solid #475569; background: #0f172a; color: #f8fafc; font-family: monospace; box-sizing: border-box; }
+        button { background: #0284c7; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; margin-top: 15px; font-weight: bold; }
+        button:hover { background: #0369a1; }
+        pre { background: #090d16; padding: 15px; border-radius: 4px; overflow-x: auto; color: #38bdf8; border: 1px solid #1e293b; }
+        footer { margin-top: 40px; font-size: 0.8em; color: #64748b; text-align: center; border-top: 1px solid #1e293b; padding-top: 20px; }
+        footer a { color: #38bdf8; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <h1>Nitro Server Configurator & Preset Schema Builder</h1>
+    <p>Generate valid <code>nitro.config.ts</code> declarations, deployment target presets, caching strategies, and storage drivers for <a href="https://github.com/nitrojs/nitro" target="_blank">nitrojs/nitro</a> server engines.</p>
+
+    <div class="card">
+        <h2>Configuration Rules</h2>
+        <label for="preset">Deployment Preset Target</label>
+        <select id="preset">
+            <option value="node-server">Node Server (Standalone)</option>
+            <option value="cloudflare-pages">Cloudflare Pages</option>
+            <option value="vercel">Vercel Functions/Edge</option>
+            <option value="bun">Bun Native Server</option>
+            <option value="aws-lambda">AWS Lambda / Serverless</option>
+        </select>
+
+        <label for="routeRules">Route Rules Configuration (JSON)</label>
+        <textarea id="routeRules" rows="4">{
+  "/api/**": { "cors": true, "headers": { "access-control-allow-origin": "*" } },
+  "/blog/**": { "isr": 3600 },
+  "/assets/**": { "headers": { "cache-control": "public, max-age=31536000, immutable" } }
+}</textarea>
+
+        <label for="storageDriver">Storage Mount Point & Driver</label>
+        <select id="storageDriver">
+            <option value="memory">In-Memory (Dev/Testing)</option>
+            <option value="fs">File System (Local Disk)</option>
+            <option value="redis">Redis KV Cluster</option>
+            <option value="cloudflareKV">Cloudflare KV Binding</option>
+        </select>
+
+        <button onclick="generateConfig()">Generate nitro.config.ts</button>
+    </div>
+
+    <div class="card">
+        <h2>Output Config</h2>
+        <pre id="output">Click 'Generate' to display the Nitro configuration TS code.</pre>
+    </div>
+
+    <footer>
+        <p>Built by Kairo | <a href="/index.html">Back to All Tools</a></p>
+    </footer>
+
+    <script>
+        function generateConfig() {
+            const preset = document.getElementById('preset').value;
+            let routeRules = {};
+            try {
+                routeRules = JSON.parse(document.getElementById('routeRules').value);
+            } catch (e) {
+                alert('Invalid JSON in Route Rules');
+                return;
+            }
+            const storageDriver = document.getElementById('storageDriver').value;
+
+            const config = {
+                preset: preset,
+                routeRules: routeRules,
+                storage: {
+                    data: {
+                        driver: storageDriver
+                    }
+                },
+                experimental: {
+                    asyncContext: true,
+                    database: false
+                }
+            };
+
+            const outputStr = `import { defineNitroConfig } from 'nitropack/config';\n\nexport default defineNitroConfig({\n  preset: '${preset}',\n  routeRules: ${JSON.stringify(routeRules, null, 4).replace(/\n/g, '\n  ')},\n  storage: {\n    db: {\n      driver: '${storageDriver}'\n    }\n  },\n  experimental: {\n    asyncContext: true\n  }\n});`;
+
+            document.getElementById('output').textContent = outputStr;
+        }
+        generateConfig();
+    </script>
+</body>
+</html>
