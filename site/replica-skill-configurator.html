@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Claude Replica Skill Configurator</title>
+    <style>body { font-family: sans-serif; padding: 20px; line-height: 1.6; } textarea { width: 100%; height: 100px; } button { padding: 10px; background: #007bff; color: white; border: none; cursor: pointer; }</style>
+</head>
+<body>
+    <h1>Claude Replica Skill Configurator</h1>
+    <p>Generate manifests and prompts for reverse-engineering and cloning apps.</p>
+    <label>App Name:</label><br><textarea id="appName"></textarea><br>
+    <label>Target Behavior:</label><br><textarea id="behavior"></textarea><br>
+    <button onclick="generate()">Generate Manifest</button>
+    <pre id="output"></pre>
+    <script>
+        function generate() {
+            const app = document.getElementById('appName').value;
+            const beh = document.getElementById('behavior').value;
+            document.getElementById('output').textContent = `Manifest for ${app}:\nSkills: Reverse-engineer, Clone, Rebuild, Test, Fix\nBehavior: ${beh}\nPrompt: "Analyze ${app} and clone the functionality using Claude skills."`;
+        }
+    </script>
+</body>
+</html>
