@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Public API Integration Configurator | L32 Factory</title>
+  <style>body{font-family:sans-serif;line-height:1.6;max-width:800px;margin:2rem auto;padding:0 1rem;}textarea{width:100%;height:150px;}</style>
+</head>
+<body>
+  <h1>Public API Integration Configurator</h1>
+  <p>Generate authentication headers, base URLs, and request templates for your API integrations.</p>
+  <label>API Name:</label><br><input type="text" id="apiName" placeholder="e.g., WeatherAPI"><br><br>
+  <label>Base URL:</label><br><input type="text" id="baseUrl" placeholder="https://api.example.com"><br><br>
+  <label>Auth Type:</label><br><select id="authType"><option>API Key</option><option>Bearer Token</option><option>None</option></select><br><br>
+  <button onclick="generate()">Generate Integration Template</button>
+  <pre id="output"></pre>
+  <script>
+    function generate(){
+      const name = document.getElementById('apiName').value;
+      const url = document.getElementById('baseUrl').value;
+      const auth = document.getElementById('authType').value;
+      document.getElementById('output').textContent = `// Integration boilerplate for ${name}\nconst BASE_URL = '${url}';\nconst AUTH_TYPE = '${auth}';\n\nasync function fetchData(endpoint) {\n  const response = await fetch(\`${BASE_URL}${endpoint}\`, {\n    headers: { 'Authorization': AUTH_TYPE === 'API Key' ? 'Bearer YOUR_KEY' : '...' }\n  });\n  return response.json();\n}`;
+    }
+  </script>
+</body>
+</html>
