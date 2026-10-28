@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wails App Manifest & Build Configurator</title>
+    <style>
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --accent: #0284c7;
+            --accent-hover: #0369a1;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: #334155;
+        }
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background: var(--bg-secondary);
+            padding: 24px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+        h1 {
+            margin-top: 0;
+            color: var(--text-main);
+            font-size: 1.75rem;
+        }
+        p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+        .form-group {
+            margin-bottom: 16px;
+        }
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-main);
+            box-sizing: border-box;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+        button {
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: var(--accent-hover);
+        }
+        pre {
+            background: var(--bg-primary);
+            padding: 16px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            overflow-x: auto;
+            color: #38bdf8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Wails App Manifest & Build Configurator</h1>
+        <p>Targeting Wails v2/v3 Go desktop app development. Configure your <code>wails.json</code> application manifest quickly.</p>
+        
+        <div class="grid">
+            <div class="form-group">
+                <label for="name">App Name</label>
+                <input type="text" id="name" value="my-wails-app" oninput="generateConfig()">
+            </div>
+            <div class="form-group">
+                <label for="outputFilename">Output Executable Name</label>
+                <input type="text" id="outputFilename" value="MyWailsApp" oninput="generateConfig()">
+            </div>
+        </div>
+
+        <div class="grid">
+            <div class="form-group">
+                <label for="frontendDir">Frontend Directory</label>
+                <input type="text" id="frontendDir" value="./frontend" oninput="generateConfig()">
+            </div>
+            <div class="form-group">
+                <label for="assetDir">Asset Directory / Build Command</label>
+                <input type="text" id="assetDir" value="dist" oninput="generateConfig()">
+            </div>
+        </div>
+
+        <div class="grid">
+            <div class="form-group">
+                <label for="author">Author Name</label>
+                <input type="text" id="author" value="Developer" oninput="generateConfig()">
+            </div>
+            <div class="form-group">
+                <label for="authorEmail">Author Email</label>
+                <input type="text" id="authorEmail" value="dev@example.com" oninput="generateConfig()">
+            </div>
+        </div>
+
+        <button onclick="copyToClipboard()">Copy wails.json</button>
+
+        <h3>Generated <code>wails.json</code></h3>
+        <pre id="output"></pre>
+    </div>
+
+    <script>
+        function generateConfig() {
+            const config = {
+                "$schema": "https://wails.io/schemas/config.v2.json",
+                "name": document.getElementById('name').value,
+                "outputfilename": document.getElementById('outputFilename').value,
+                "frontend:dir": document.getElementById('frontendDir').value,
+                "frontend:install": "npm install",
+                "frontend:build": "npm run build",
+                "frontend:dev:watcher": "npm run dev",
+                "frontend:dev:serverUrl": "auto",
+                "author": {
+                    "name": document.getElementById('author').value,
+                    "email": document.getElementById('authorEmail').value
+                }
+            };
+            document.getElementById('output').textContent = JSON.stringify(config, null, 2);
+        }
+
+        function copyToClipboard() {
+            const text = document.getElementById('output').textContent;
+            navigator.clipboard.writeText(text);
+            alert('Copied to clipboard!');
+        }
+
+        generateConfig();
+    </script>
+</body>
+</html>
