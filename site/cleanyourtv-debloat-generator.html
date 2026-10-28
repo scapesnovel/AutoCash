@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CleanYourTV Debloat Script Generator</title>
+  <style>body { font-family: sans-serif; padding: 20px; line-height: 1.6; } .container { max-width: 600px; margin: auto; } textarea { width: 100%; height: 100px; } button { padding: 10px; background: #007bff; color: white; border: none; cursor: pointer; }</style>
+</head>
+<body>
+  <div class="container">
+    <h1>CleanYourTV Debloat Script Generator</h1>
+    <p>Generate custom ADB commands for your Android TV device.</p>
+    <label>Device Model:</label><br><input type="text" id="model" placeholder="e.g. Chromecast with Google TV"><br><br>
+    <label>Packages to Remove (comma separated):</label><br><textarea id="packages" placeholder="com.google.android.apps.tv.launcher"></textarea><br><br>
+    <button onclick="generateScript()">Generate ADB Script</button>
+    <pre id="output"></pre>
+  </div>
+  <script>
+    function generateScript() {
+      const model = document.getElementById('model').value;
+      const pkgs = document.getElementById('packages').value.split(',');
+      let script = `# Debloat script for ${model}\n`;
+      pkgs.forEach(p => { script += `adb shell pm uninstall -k --user 0 ${p.trim()}\n`; });
+      document.getElementById('output').textContent = script;
+    }
+  </script>
+</body>
+</html>
