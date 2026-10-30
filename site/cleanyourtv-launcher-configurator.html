@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CleanYourTV Apple TV Style Launcher Configurator</title>
+    <meta name="description" content="Generate custom layout configurations and launcher settings for the CleanYourTV ecosystem.">
+    <style>body{font-family:sans-serif;line-height:1.6;max-width:800px;margin:20px auto;padding:0 20px;background:#f4f4f9;}textarea{width:100%;height:150px;margin:10px 0;}button{padding:10px 20px;background:#007bff;color:white;border:none;cursor:pointer;}</style>
+</head>
+<body>
+    <h1>CleanYourTV Apple TV Style Launcher Configurator</h1>
+    <p>Configure your Android TV layout to mimic an Apple TV experience.</p>
+    <label>Launcher Grid Size (e.g., 4x6):</label>
+    <input type="text" id="grid" value="4x6">
+    <label>Custom App Icons Path:</label>
+    <input type="text" id="icons" value="/sdcard/icons">
+    <button onclick="generateConfig()">Generate Configuration</button>
+    <textarea id="output" readonly></textarea>
+    <script>
+        function generateConfig() {
+            const grid = document.getElementById('grid').value;
+            const icons = document.getElementById('icons').value;
+            const config = `{
+  "launcher_layout": "apple-tv-style",
+  "grid_size": "${grid}",
+  "icon_path": "${icons}",
+  "enabled_features": ["dynamic-dock", "minimalist-ui"]
+}`;
+            document.getElementById('output').value = config;
+        }
+    </script>
+</body>
+</html>
