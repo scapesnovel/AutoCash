@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CleanYourTV ADB Package & Batch Script Configurator</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif; line-height: 1.6; padding: 20px; max-width: 900px; margin: 0 auto; color: #333; }
+    header { border-bottom: 2px solid #eaeaea; padding-bottom: 20px; margin-bottom: 20px; }
+    h1 { margin: 0 0 10px 0; color: #111; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .card { background: #f9f9f9; padding: 20px; border-radius: 8px; border: 1px solid #e1e1e1; }
+    label { font-weight: bold; display: block; margin-top: 10px; }
+    select, input, textarea { width: 100%; padding: 8px; margin-top: 5px; border-radius: 4px; border: 1px solid #ccc; font-family: monospace; box-sizing: border-box; }
+    button { background: #0066cc; color: #fff; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; margin-top: 15px; }
+    button:hover { background: #0052a3; }
+    pre { background: #1e1e1e; color: #f8f8f2; padding: 15px; border-radius: 6px; overflow-x: auto; white-space: pre-wrap; word-break: break-all; font-size: 13px; }
+    footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #eaeaea; text-align: center; font-size: 14px; color: #666; }
+    footer a { color: #0066cc; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>CleanYourTV ADB Package & Batch Script Configurator</h1>
+    <p>Generate precise ADB command sequences to disable, remove, or restore bloatware packages on Android TV / Fire TV devices based on the Gathin23/cleanyourtv specifications.</p>
+  </header>
+
+  <main class="grid">
+    <div class="card">
+      <h3>Configuration Options</h3>
+      <label for="target-device">Target Device Profile:</label>
+      <select id="target-device">
+        <option value="generic">Generic Android TV (Android 9+)</option>
+        <option value="firetv">Amazon Fire TV OS</option>
+        <option value="shield">NVIDIA Shield TV</option>
+        <option value="chromecast">Chromecast with Google TV</option>
+      </select>
+
+      <label for="action-mode">Execution Mode:</label>
+      <select id="action-mode">
+        <option value="disable">Disable / Uninstall for User 0 (Safe Debloat)</option>
+        <option value="enable">Enable / Restore Disabled Packages</option>
+        <option value="clear">Clear Package Data & Cache Only</option>
+      </select>
+
+      <label for="packages-list">Target Packages (one per line):</label>
+      <textarea id="packages-list" rows="8">com.amazon.tv.launcher
+com.google.android.youtube.tvunplugged
+com.netflix.ninja
+com.amazon.vizzini
+com.android.providers.downloads.ui</textarea>
+
+      <button id="generate-btn">Generate ADB Batch Script</button>
+    </div>
+
+    <div class="card">
+      <h3>Generated Script / Manifest</h3>
+      <pre id="output-script"># Click 'Generate ADB Batch Script' to generate your custom ADB shell commands.</pre>
+    </div>
+  </main>
+
+  <footer>
+    <p><a href="index.html">&larr; Back to L32 Web Tools Factory Directory</a></p>
+    <p>Built autonomously by Kairo | <a href="https://github.com/aigentic/AutoCash" target="_blank">GitHub Audit Log</a></p>
+  </footer>
+
+  <script>
+    document.getElementById('generate-btn').addEventListener('click', function() {
+      const device = document.getElementById('target-device').value;
+      const mode = document.getElementById('action-mode').value;
+      const rawPkgs = document.getElementById('packages-list').value.split('\n');
+      const pkgs = rawPkgs.map(p => p.trim()).filter(p => p.length > 0);
+
+      let script = '#!/usr/bin/env bash\n';
+      script += '# CleanYourTV Generated ADB Debloat Script\n';
+      script += '# Device Target: ' + device + '\n';
+      script += '# Execution Mode: ' + mode + '\n\n';
+      script += 'echo "[+] Connecting to device over ADB..."\n';
+      script += 'adb devices\n\n';
+
+      pkgs.forEach(pkg => {
+        if (mode === 'disable') {
+          script += `echo "[-] Debloating ${pkg}..."\n`;
+          script += `adb shell pm disable-user --user 0 ${pkg}\n`;
+          script += `adb shell pm uninstall -k --user 0 ${pkg}\n`;
+        } else if (mode === 'enable') {
+          script += `echo "[+] Restoring ${pkg}..."\n`;
+          script += `adb shell pm enable ${pkg}\n`;
+        } else if (mode === 'clear') {
+          script += `echo "[*] Clearing data for ${pkg}..."\n`;
+          script += `adb shell pm clear ${pkg}\n`;
+        }
+      });
+
+      script += '\necho "[+] Debloat process completed successfully."' ;
+      document.getElementById('output-script').textContent = script;
+    });
+  </script>
+</body>
+</html>
