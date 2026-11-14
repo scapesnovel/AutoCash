@@ -316,6 +316,19 @@ export const TOOLS = [
     description: "Close a completed human task with its outcome.",
     args: { issue_number: "number", outcome: "string" },
   },
+  {
+    name: "create_checkout",
+    description:
+      "Create a checkout session for a product via Lemon Squeezy or Gumroad. Configured via environment variables: PAYMENT_GATEWAY (lemon|gumroad), LEMON_SQUEEZY_API_KEY, LEMON_SQUEEZY_STORE_ID, GUMROAD_ACCESS_TOKEN, PAYMENT_SUCCESS_URL, PAYMENT_CANCEL_URL. Returns the checkout URL.",
+    args: {
+      product_id: "string ID of the product/variant in the gateway",
+      variant_id: "string (optional) specific variant ID (Lemon Squeezy)",
+      email: "string (optional) customer email for prefill",
+      custom_price: "number (optional) override price in USD (e.g., 29.99)",
+      success_url: "string (optional) override success redirect URL",
+      cancel_url: "string (optional) override cancel redirect URL",
+    },
+  },
 ];
 
 export async function runTool(name, args, journal) {
@@ -585,6 +598,80 @@ export async function runTool(name, args, journal) {
       await closeHumanTask(args);
       push("human", `closed #${args.issue_number}: ${args.outcome}`);
       return "closed";
+    }
+    case "create_checkout": {
+      const gateway = process.env.PAYMENT_GATEWAY || "lemon";
+      const productId = String(args.product_id || "").trim();
+      const variantId = String(args.variant_id || "").trim();
+      const email = String(args.email || "").trim();
+      const customPrice = args.custom_price ? Number(args.custom_price) : null;
+      const successUrl = String(args.success_url || process.env.PAYMENT_SUCCESS_URL || "").trim();
+      const cancelUrl = String(args.cancel_url || process.env.PAYMENT_CANCEL_URL || "").trim();
+
+      if (!productId) throw new Error("product_id required");
+      if (gateway === "lemon") {
+        const apiKey = process.env.LEMON_SQUEEZY_API_KEY;
+        const storeId = process.env.LEMON_SQUEEZY_STORE_ID;
+        if (!apiKey || !storeId) throw new Error("LEMON_SQUEEZY_API_KEY and LEMON_SQUEEZY_STORE_ID required in env");
+        const endpoint = "https://api.lemonsqueezy.com/v1/checkouts";
+        const body = {
+          data: {
+            type: "checkouts",
+            attributes: {
+              product_options: {
+                redirect_url: successUrl || undefined,
+                receipt_button_text: "Access Product",
+                receipt_link_url: successUrl || undefined,
+                receipt_thank_you_note: "Thank you for your purchase!",
+              },
+              checkout_options: {
+                embed: false,
+                media: false,
+                logo: !storeId,
+                discount_codes: true,
+              },
+              checkout_data: {
+                email: email || undefined,
+                custom: { product_id: productId },
+              },
+            },
+            relationships: {
+              store: { data: { type: "stores", id: storeId } },
+              variant: { data: { type: "variants", id: variantId || productId } },
+            },
+          },
+        };
+        if (customPrice !== null) {
+          body.data.attributes.checkout_data.custom.price = customPrice;
+        }
+        const resp = await fetch(endpoint, {
+          method: "POST",
+          headers: {
+            "Accept": "application/vnd.api+json",
+            "Content-Type": "application/vnd.api+json",
+            "Authorization": `Bearer ${apiKey}`,
+          },
+          body: JSON.stringify(body),
+        });
+        const data = await resp.json();
+        if (!resp.ok) throw new Error(`Lemon Squeezy error: ${JSON.stringify(data)}`);
+        const url = data.data?.attributes?.url;
+        if (!url) throw new Error("No checkout URL returned");
+        push("checkout", `lemon:${productId} -> ${url}`);
+        return url;
+      } else if (gateway === "gumroad") {
+        const accessToken = process.env.GUMROAD_ACCESS_TOKEN;
+        if (!accessToken) throw new Error("GUMROAD_ACCESS_TOKEN required in env");
+        const baseUrl = `https://gumroad.com/l/${productId}`;
+        const params = new URLSearchParams();
+        if (email) params.set("email", email);
+        if (customPrice !== null) params.set("amount", Math.round(customPrice * 100));
+        const url = params.toString() ? `${baseUrl}?${params}` : baseUrl;
+        push("checkout", `gumroad:${productId} -> ${url}`);
+        return url;
+      } else {
+        throw new Error(`Unknown gateway: ${gateway}. Use 'lemon' or 'gumroad'.`);
+      }
     }
     default:
       throw new Error(`unknown tool: ${name}. Available: ${TOOLS.map((t) => t.name).join(", ")}`);
