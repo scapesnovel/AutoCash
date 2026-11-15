@@ -2,28 +2,34 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src data:; connect-src 'self'">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta name="referrer" content="no-referrer">
+    <meta http-equiv="Strict-Transport-Security" content="max-age=63072000; includeSubDomains; preload">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GestaltX iOS Device Configurator</title>
-    <style>body{font-family:sans-serif;padding:20px;line-height:1.6;} .container{max-width:800px;margin:auto;} input,select{display:block;width:100%;margin-bottom:10px;padding:8px;}</style>
+    <title>GestaltX MobileGestalt Device Preset & Region Configurator</title>
 </head>
 <body>
-    <div class="container">
-        <h1>GestaltX iOS Device Configurator</h1>
-        <p>Generate region-code and device-preset manifests for your GestaltX setup.</p>
+    <h1>GestaltX MobileGestalt Device Preset & Region Configurator</h1>
+    <p>Configure your MobileGestalt overrides and region-code tweaks for iOS 27.x.</p>
+    <form id="gestaltx-form">
+        <label>Device Model Identifier:</label>
+        <input type="text" id="deviceModel" placeholder="e.g. iPhone18,1">
         <label>Region Code:</label>
-        <input type="text" id="region" placeholder="e.g. US/A">
-        <label>Device Preset:</label>
-        <select id="preset">
-            <option value="iPhone17,1">iPhone 17 Pro</option>
-            <option value="iPad16,3">iPad Pro M4</option>
-        </select>
-        <button onclick="generate()">Generate Manifest</button>
-        <pre id="output"></pre>
-    </div>
+        <input type="text" id="regionCode" placeholder="e.g. LL/A">
+        <label>Enable Debug Mode:</label>
+        <input type="checkbox" id="debugMode">
+        <button type="button" onclick="generateConfig()">Generate Override Config</button>
+    </form>
+    <pre id="output"></pre>
     <script>
-        function generate(){
-            const data = { region: document.getElementById('region').value, preset: document.getElementById('preset').value };
-            document.getElementById('output').textContent = JSON.stringify(data, null, 2);
+        function generateConfig() {
+            const model = document.getElementById('deviceModel').value;
+            const region = document.getElementById('regionCode').value;
+            const debug = document.getElementById('debugMode').checked;
+            const config = { "MobileGestalt": { "DeviceModel": model, "RegionCode": region, "DebugMode": debug }, "Version": "1.0.0" };
+            document.getElementById('output').textContent = JSON.stringify(config, null, 4);
         }
     </script>
 </body>
