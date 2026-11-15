@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GestaltX iOS Device Configurator</title>
+    <style>body{font-family:sans-serif;padding:20px;line-height:1.6;} .container{max-width:800px;margin:auto;} input,select{display:block;width:100%;margin-bottom:10px;padding:8px;}</style>
+</head>
+<body>
+    <div class="container">
+        <h1>GestaltX iOS Device Configurator</h1>
+        <p>Generate region-code and device-preset manifests for your GestaltX setup.</p>
+        <label>Region Code:</label>
+        <input type="text" id="region" placeholder="e.g. US/A">
+        <label>Device Preset:</label>
+        <select id="preset">
+            <option value="iPhone17,1">iPhone 17 Pro</option>
+            <option value="iPad16,3">iPad Pro M4</option>
+        </select>
+        <button onclick="generate()">Generate Manifest</button>
+        <pre id="output"></pre>
+    </div>
+    <script>
+        function generate(){
+            const data = { region: document.getElementById('region').value, preset: document.getElementById('preset').value };
+            document.getElementById('output').textContent = JSON.stringify(data, null, 2);
+        }
+    </script>
+</body>
+</html>
