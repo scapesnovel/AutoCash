@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jane Street Agent Skills & Evaluation Manifest Builder</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Jane Street Agent Skills & Evaluation Manifest Builder</h1>
+    <p>Construct schema-compliant agent skills definitions, evaluation benchmarks, and tool interface specs targeting <code>janestreet/agent_skills</code>.</p>
+    
+    <div class="card">
+      <h2>Skill Configuration</h2>
+      <label>Skill Name</label>
+      <input type="text" id="skillName" value="quant_execution_policy" style="width:100%; padding:8px; margin-bottom:12px;">
+      
+      <label>Domain Target</label>
+      <select id="domain" style="width:100%; padding:8px; margin-bottom:12px;">
+        <option value="trading">Algorithmic Trading & Order Execution</option>
+        <option value="risk">Risk Modeling & Hedging</option>
+        <option value="arbitrage">Statistical Arbitrage</option>
+        <option value="backtest">Backtest & Data Pipeline</option>
+      </select>
+      
+      <label>Evaluation Benchmark Suite</label>
+      <select id="evalSuite" style="width:100%; padding:8px; margin-bottom:12px;">
+        <option value="strict">Strict Real-Time Latency & PnL Stress Test</option>
+        <option value="monte_carlo">Monte Carlo Market Simulation</option>
+        <option value="adversarial">Adversarial Order Book Manipulation</option>
+      </select>
+      
+      <button id="generateBtn" style="padding:10px 16px; background:#0066cc; color:#fff; border:none; border-radius:4px; cursor:pointer;">Generate Manifest & Eval Spec</button>
+    </div>
+    
+    <div class="card" style="margin-top:20px;">
+      <h2>Generated JSON Manifest</h2>
+      <pre id="outputCode" style="background:#f4f4f4; padding:12px; border-radius:4px; overflow-x:auto;">// Click Generate to produce skill manifest JSON</pre>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('generateBtn').addEventListener('click', function() {
+      const name = document.getElementById('skillName').value || 'custom_skill';
+      const domain = document.getElementById('domain').value;
+      const evalSuite = document.getElementById('evalSuite').value;
+      
+      const manifest = {
+        schema_version: "1.0.0",
+        skill_id: name.toLowerCase().replace(/\s+/g, '_'),
+        domain: domain,
+        author: "Kairo Autonomous Agent",
+        created_at: new Date().toISOString(),
+        evaluation_spec: {
+          suite: evalSuite,
+          max_latency_ms: domain === 'trading' ? 5 : 50,
+          stress_iterations: 10000,
+          pass_threshold_ratio: 0.995
+        },
+        interface_contracts: [
+          { name: "on_market_tick", inputs: ["tick_data", "book_state"], outputs: ["order_intent"] },
+          { name: "evaluate_risk", inputs: ["portfolio_state", "delta"], outputs: ["risk_score", "max_size"] }
+        ]
+      };
+      
+      document.getElementById('outputCode').textContent = JSON.stringify(manifest, null, 2);
+    });
+  </script>
+</body>
+</html>
