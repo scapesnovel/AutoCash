@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Astryx Design System & Agent Token Configurator</title>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net;">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="Referrer-Policy" content="no-referrer">
+    <style>
+        :root { --bg: #0f172a; --panel: #1e293b; --text: #f8fafc; --accent: #38bdf8; --border: #334155; }
+        body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 2rem; }
+        .container { max-width: 900px; margin: 0 auto; }
+        h1 { font-size: 1.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.5rem; color: var(--accent); }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1.5rem; }
+        .card { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem; }
+        label { display: block; margin-top: 0.75rem; font-size: 0.875rem; font-weight: 600; }
+        input, select, textarea { width: 100%; background: #090d16; border: 1px solid var(--border); color: #fff; padding: 0.5rem; border-radius: 4px; margin-top: 0.25rem; box-sizing: border-box; }
+        button { background: var(--accent); color: #000; font-weight: bold; border: none; padding: 0.75rem 1.5rem; border-radius: 4px; cursor: pointer; margin-top: 1rem; width: 100%; }
+        button:hover { opacity: 0.9; }
+        pre { background: #090d16; padding: 1rem; border-radius: 4px; overflow-x: auto; font-size: 0.85rem; border: 1px solid var(--border); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Astryx Design System & Agent Token Configurator</h1>
+        <p>Targeting Meta's <code>astryx</code> design system for agent-ready UI generation.</p>
+        <div class="grid">
+            <div class="card">
+                <h3>Theme Configuration</h3>
+                <label>Primary Brand Color</label>
+                <input type="color" id="primaryColor" value="#38bdf8">
+                <label>Radius Scale</label>
+                <select id="radiusScale">
+                    <option value="sm">Small (4px)</option>
+                    <option value="md" selected>Medium (8px)</option>
+                    <option value="lg">Large (16px)</option>
+                    <option value="full">Full Pill</option>
+                </select>
+                <label>Agent Interaction Protocol</label>
+                <select id="agentProtocol">
+                    <option value="mcp">Model Context Protocol (MCP)</option>
+                    <option value="json-schema">JSON Schema Spec</option>
+                    <option value="aria-augmented">ARIA Augmented Agent Spec</option>
+                </select>
+                <label>Component Export Targets</label>
+                <input type="text" id="componentTargets" value="Button, Card, Input, Modal">
+                <button onclick="generateConfig()">Generate Config</button>
+            </div>
+            <div class="card">
+                <h3>Generated Astryx Schema</h3>
+                <pre id="output">// Click generate to produce JSON configuration...</pre>
+            </div>
+        </div>
+    </div>
+    <script>
+        function generateConfig() {
+            const config = {
+                system: "astryx",
+                version: "1.0.0",
+                theme: {
+                    primaryColor: document.getElementById('primaryColor').value,
+                    radius: document.getElementById('radiusScale').value,
+                },
+                agent: {
+                    protocol: document.getElementById('agentProtocol').value,
+                    ready: true,
+                    components: document.getElementById('componentTargets').value.split(',').map(s => s.trim())
+                }
+            };
+            document.getElementById('output').textContent = JSON.stringify(config, null, 2);
+        }
+    </script>
+</body>
+</html>
