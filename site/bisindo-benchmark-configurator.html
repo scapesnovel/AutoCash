@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BISINDO ML Benchmark Schema Configurator</title>
+    <style>body { font-family: sans-serif; padding: 20px; line-height: 1.6; } input, textarea { width: 100%; margin-bottom: 10px; }</style>
+</head>
+<body>
+    <h1>BISINDO ML Benchmark Schema Configurator</h1>
+    <p>Configure your model training parameters and benchmark schema for BISINDO recognition.</p>
+    <label>Model Architecture:</label>
+    <input type="text" id="arch" placeholder="e.g., Random Forest, SVM">
+    <label>Feature Extraction Method:</label>
+    <input type="text" id="features" placeholder="e.g., Skeleton Landmarks">
+    <button onclick="generate()">Generate Schema</button>
+    <pre id="output"></pre>
+    <script>
+        function generate() {
+            const arch = document.getElementById('arch').value;
+            const features = document.getElementById('features').value;
+            const schema = { benchmark: "BISINDO-Recognition", architecture: arch, features: features, timestamp: new Date().toISOString() };
+            document.getElementById('output').textContent = JSON.stringify(schema, null, 2);
+        }
+    </script>
+</body>
+</html>
