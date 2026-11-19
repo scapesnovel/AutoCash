@@ -1,27 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang='en'>
 <head>
-    <meta charset="UTF-8">
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <meta name='referrer' content='no-referrer'>
+    <meta http-equiv='Content-Security-Policy' content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';">
     <title>Wireless Device Battery & Polling Schema Configurator</title>
-    <meta name="description" content="Generate schema-compliant configurations for device battery monitoring and polling intervals.">
-    <style>body { font-family: sans-serif; padding: 20px; line-height: 1.6; } .container { max-width: 600px; margin: auto; }</style>
 </head>
 <body>
-    <div class="container">
-        <h1>Wireless Device Battery Configurator</h1>
-        <p>Configure polling intervals and device thresholds for your wireless peripherals.</p>
-        <form id="configForm">
-            <label>Polling Interval (ms): <input type="number" id="interval" value="5000"></label><br>
-            <label>Low Battery Threshold (%): <input type="number" id="threshold" value="20"></label><br>
-            <button type="button" onclick="generateConfig()">Generate Schema</button>
-        </form>
-        <pre id="output"></pre>
-    </div>
+    <h1>Wireless Device Battery & Polling Schema Configurator</h1>
+    <p>Configure polling intervals and battery threshold alerts for your wireless device monitoring system.</p>
+    <textarea id='output' rows='10' cols='50' readonly></textarea>
     <script>
-        function generateConfig() {
-            const config = { interval: document.getElementById('interval').value, threshold: document.getElementById('threshold').value };
-            document.getElementById('output').textContent = JSON.stringify(config, null, 2);
+        function generateSchema() {
+            const schema = { "polling_interval_ms": 60000, "battery_threshold_low": 20, "alert_enabled": true };
+            document.getElementById('output').value = JSON.stringify(schema, null, 2);
         }
+        generateSchema();
     </script>
 </body>
 </html>
