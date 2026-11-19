@@ -1,1 +1,27 @@
-<!DOCTYPE html><html><head><meta charset='UTF-8'><meta http-equiv='X-Content-Type-Options' content='nosniff'><meta http-equiv='X-Frame-Options' content='DENY'><meta http-equiv='Referrer-Policy' content='no-referrer'><title>Wireless Device Battery & Polling Configurator</title><style>body{font-family:sans-serif;padding:20px;}form{border:1px solid #ccc;padding:15px;}</style></head><body><h1>Wireless Device Battery & Polling Configurator</h1><form><div><label>Polling Interval (ms):</label><input type='number' name='interval' value='5000'></div><br><button type='button'>Generate Config</button></form></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Wireless Device Battery & Polling Schema Configurator</title>
+    <meta name="description" content="Generate schema-compliant configurations for device battery monitoring and polling intervals.">
+    <style>body { font-family: sans-serif; padding: 20px; line-height: 1.6; } .container { max-width: 600px; margin: auto; }</style>
+</head>
+<body>
+    <div class="container">
+        <h1>Wireless Device Battery Configurator</h1>
+        <p>Configure polling intervals and device thresholds for your wireless peripherals.</p>
+        <form id="configForm">
+            <label>Polling Interval (ms): <input type="number" id="interval" value="5000"></label><br>
+            <label>Low Battery Threshold (%): <input type="number" id="threshold" value="20"></label><br>
+            <button type="button" onclick="generateConfig()">Generate Schema</button>
+        </form>
+        <pre id="output"></pre>
+    </div>
+    <script>
+        function generateConfig() {
+            const config = { interval: document.getElementById('interval').value, threshold: document.getElementById('threshold').value };
+            document.getElementById('output').textContent = JSON.stringify(config, null, 2);
+        }
+    </script>
+</body>
+</html>
