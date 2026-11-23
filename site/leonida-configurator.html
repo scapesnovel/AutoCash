@@ -3,87 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src data:; connect-src 'self'">
+    <meta http-equiv="Strict-Transport-Security" content="max-age=63072000; includeSubDomains; preload">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="Referrer-Policy" content="no-referrer">
     <title>Leonida Native Recompilation & Build Configurator</title>
-    <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; background-color: #0f172a; color: #f8fafc; }
-        h1 { color: #38bdf8; }
-        .card { background: #1e293b; padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #334155; }
-        label { display: block; margin-top: 10px; font-weight: bold; color: #cbd5e1; }
-        input, select, textarea { width: 100%; padding: 8px; margin-top: 5px; border-radius: 4px; border: 1px solid #475569; background: #0f172a; color: #f8fafc; box-sizing: border-box; }
-        button { background: #0284c7; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; margin-top: 15px; font-weight: bold; }
-        button:hover { background: #0369a1; }
-        pre { background: #020617; padding: 15px; border-radius: 4px; overflow-x: auto; border: 1px solid #1e293b; color: #38bdf8; }
-    </style>
 </head>
 <body>
-    <h1>Leonida Recompilation & Build Configurator</h1>
-    <p>Configure build parameters, shader cache options, and target platform presets for Leonida native recompilation builds.</p>
-    
-    <div class="card">
-        <label for="targetRes">Target Resolution Preset:</label>
-        <select id="targetRes">
-            <option value="1080p_60fps">1080p @ 60 FPS (Balanced)</option>
-            <option value="1440p_60fps">1440p @ 60 FPS (Quality)</option>
-            <option value="4k_60fps">4K @ 60 FPS (Ultra Quality)</option>
-            <option value="720p_unlocked">720p Unlocked (Performance/Handheld)</option>
-        </select>
-
-        <label for="shaderCache">Shader Cache Strategy:</label>
-        <select id="shaderCache">
-            <option value="async_precompile">Async Precompilation + Disk Cache</option>
-            <option value="jit_strict">Strict JIT (Low VRAM)</option>
-            <option value="uber_shaders">UberShader Fallback (No Stutter)</option>
-        </select>
-
-        <label for="audioBackend">Audio Emulation Backend:</label>
-        <select id="audioBackend">
-            <option value="cubeb">Cubeb (Default Low Latency)</option>
-            <option value="sdl2">SDL2 Fallback</option>
-            <option value="xaudio2">XAudio2 (Windows Native)</option>
-        </select>
-
-        <label for="memoryAlloc">VRAM / RAM Allocation (MB):</label>
-        <input type="number" id="memoryAlloc" value="8192" step="1024">
-
-        <button onclick="generateConfig()">Generate Leonida Config</button>
-    </div>
-
-    <div class="card">
-        <h3>Generated leonida_build.toml</h3>
-        <pre id="outputConfig"># Click Generate Leonida Config to output TOML schema</pre>
-    </div>
-
-    <script>
-        function generateConfig() {
-            const targetRes = document.getElementById('targetRes').value;
-            const shaderCache = document.getElementById('shaderCache').value;
-            const audioBackend = document.getElementById('audioBackend').value;
-            const memoryAlloc = document.getElementById('memoryAlloc').value;
-
-            const config = `[leonida.recompiler]
-target_preset = "${targetRes}"
-memory_limit_mb = ${memoryAlloc}
-threads = 8
-
-[shader.pipeline]
-strategy = "${shaderCache}"
-precompile_on_boot = true
-cache_dir = "./shader_cache"
-
-[audio]
-backend = "${audioBackend}"
-buffer_size = 512
-
-[experimental]
-direct_memory_mapping = true
-sync_gpu_ticks = false
-`;
-            document.getElementById('outputConfig').textContent = config;
-        }
-        generateConfig();
-    </script>
+    <h1>Leonida Native Recompilation & Build Configurator</h1>
+    <p>Configure your native build manifests and optimization presets for the Leonida ecosystem.</p>
 </body>
 </html>
