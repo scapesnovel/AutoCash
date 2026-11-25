@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; img-src 'self' data: https:;">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    <title>IncHash Disk Hash Table Schema & Slot Configurator</title>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --card: #1e293b;
+            --accent: #38bdf8;
+            --text: #f8fafc;
+            --subtext: #94a3b8;
+            --border: #334155;
+        }
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 2rem;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            max-width: 800px;
+            width: 100%;
+        }
+        h1 {
+            color: var(--accent);
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+        p.desc {
+            color: var(--subtext);
+            margin-bottom: 2rem;
+        }
+        .card {
+            background: var(--card);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            margin-bottom: 1.5rem;
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        input, select {
+            width: 100%;
+            padding: 0.75rem;
+            border-radius: 4px;
+            border: 1px solid var(--border);
+            background: #090d16;
+            color: var(--text);
+            box-sizing: border-box;
+        }
+        pre {
+            background: #090d16;
+            padding: 1rem;
+            border-radius: 4px;
+            overflow-x: auto;
+            border: 1px solid var(--border);
+            color: var(--accent);
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .stat-box {
+            background: #090d16;
+            padding: 1rem;
+            border-radius: 4px;
+            border: 1px solid var(--border);
+        }
+        .stat-val {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>IncHash Schema & Slot Configurator</h1>
+        <p class="desc">Interactive sizing and initialization macro generator for the <a href="https://github.com/GiorgosXou/inchash" style="color:var(--accent);">IncHash</a> disk-based C99 hash table library.</p>
+        
+        <div class="card">
+            <div class="form-group">
+                <label for="keySize">Key Size (bytes)</label>
+                <input type="number" id="keySize" value="32" min="4" max="1024" onchange="updateConfig()">
+            </div>
+            <div class="form-group">
+                <label for="valSize">Value Size (bytes)</label>
+                <input type="number" id="valSize" value="128" min="4" max="4096" onchange="updateConfig()">
+            </div>
+            <div class="form-group">
+                <label for="initialSlots">Initial Slot Count (Power of 2)</label>
+                <input type="number" id="initialSlots" value="65536" step="1024" onchange="updateConfig()">
+            </div>
+            <div class="form-group">
+                <label for="maxLoad">Target Max Load Factor (%)</label>
+                <input type="number" id="maxLoad" value="75" min="10" max="95" onchange="updateConfig()">
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Calculated Storage Footprint</h2>
+            <div class="stats">
+                <div class="stat-box">
+                    <div>Slot Header Overhead</div>
+                    <div class="stat-val" id="slotOverhead">4 bytes</div>
+                </div>
+                <div class="stat-box">
+                    <div>Total Slot Size</div>
+                    <div class="stat-val" id="totalSlotSize">164 bytes</div>
+                </div>
+                <div class="stat-box">
+                    <div>Initial File Size</div>
+                    <div class="stat-val" id="initialFileSize">10.25 MB</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Generated C99 Initialization Code</h2>
+            <pre id="codeOutput">// Calculating...</pre>
+        </div>
+    </div>
+
+    <script>
+        function updateConfig() {
+            const keySize = parseInt(document.getElementById('keySize').value) || 32;
+            const valSize = parseInt(document.getElementById('valSize').value) || 128;
+            const initialSlots = parseInt(document.getElementById('initialSlots').value) || 65536;
+            const maxLoad = parseInt(document.getElementById('maxLoad').value) || 75;
+
+            const metaOverhead = 4; // 32-bit slot probe metadata & flags
+            const slotSize = keySize + valSize + metaOverhead;
+            const totalBytes = slotSize * initialSlots;
+            const megaBytes = (totalBytes / (1024 * 1024)).toFixed(2);
+
+            document.getElementById('slotOverhead').innerText = metaOverhead + ' bytes';
+            document.getElementById('totalSlotSize').innerText = slotSize + ' bytes';
+            document.getElementById('initialFileSize').innerText = megaBytes + ' MB';
+
+            const code = `#include "inchash.h"
+
+// IncHash Static Schema Configuration
+#define INCHASH_KEY_SIZE   ${keySize}
+#define INCHASH_VAL_SIZE   ${valSize}
+#define INCHASH_SLOT_SIZE  ${slotSize}
+#define INCHASH_INIT_SLOTS ${initialSlots}
+#define INCHASH_MAX_LOAD   ${maxLoad}
+
+int init_my_table(const char *filepath) {
+    inc_hash_table_t ht;
+    inc_config_t cfg = {
+        .key_size = INCHASH_KEY_SIZE,
+        .val_size = INCHASH_VAL_SIZE,
+        .initial_slots = INCHASH_INIT_SLOTS,
+        .max_load_pct = INCHASH_MAX_LOAD
+    };
+    return inchash_open(&ht, filepath, &cfg);
+}`;
+
+            document.getElementById('codeOutput').innerText = code;
+        }
+
+        // Run on load
+        updateConfig();
+    </script>
+</body>
+</html>
