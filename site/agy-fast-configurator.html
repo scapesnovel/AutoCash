@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Antigravity MCP Accelerator & Context Configurator</title>
+  <meta name="description" content="Configure agy-fast MCP accelerator settings, context optimization rules, token limits, and plugin options for Google Antigravity.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:;">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="X-Frame-Options" content="DENY">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>⚡ Antigravity MCP Accelerator Configurator</h1>
+      <p>Configure agy-fast performance rules, context truncation limits, MCP routing, and cache invalidation policies for Google Antigravity.</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <h2>1. General Settings</h2>
+      <label for="mcp-mode">Execution Mode</label>
+      <select id="mcp-mode">
+        <option value="fast">Fast (Aggressive Truncation & Parallel MCP)</option>
+        <option value="balanced" selected>Balanced (Standard Rules)</option>
+        <option value="thorough">Thorough (Full Context Retention)</option>
+      </select>
+
+      <label for="max-context">Max Context Window (Tokens)</label>
+      <input type="number" id="max-context" value="64000" step="4000">
+
+      <label for="cache-ttl">MCP Cache TTL (Seconds)</label>
+      <input type="number" id="cache-ttl" value="300">
+    </section>
+
+    <section class="card">
+      <h2>2. Acceleration Flags</h2>
+      <label><input type="checkbox" id="enable-parallel" checked> Enable Parallel Tool Execution</label><br>
+      <label><input type="checkbox" id="enable-speculative" checked> Speculative Context Prefetching</label><br>
+      <label><input type="checkbox" id="strip-docs" checked> Strip Redundant Docstrings in Context</label><br>
+      <label><input type="checkbox" id="strict-schema"> Enforce Strict Output Schema Validation</label>
+    </section>
+
+    <section class="card">
+      <h2>3. Generated Config (`agy-fast.json`)</h2>
+      <button id="btn-generate" class="btn">Generate Config</button>
+      <button id="btn-copy" class="btn secondary">Copy JSON</button>
+      <pre id="output-json">// Click Generate Config to output JSON manifest</pre>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>Part of L32 Web Tools Suite • <a href="index.html">Back to Index</a></p>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('btn-generate').addEventListener('click', function() {
+      const mode = document.getElementById('mcp-mode').value;
+      const maxTokens = parseInt(document.getElementById('max-context').value, 10) || 64000;
+      const cacheTtl = parseInt(document.getElementById('cache-ttl').value, 10) || 300;
+      
+      const config = {
+        $schema: "https://github.com/INK-Q/agy-fast/schema/v1.json",
+        version: "1.0.0",
+        mode: mode,
+        context: {
+          maxTokens: maxTokens,
+          stripDocstrings: document.getElementById('strip-docs').checked,
+          speculativePrefetch: document.getElementById('enable-speculative').checked
+        },
+        execution: {
+          parallelTools: document.getElementById('enable-parallel').checked,
+          strictSchema: document.getElementById('strict-schema').checked,
+          cacheTtlSeconds: cacheTtl
+        }
+      };
+
+      document.getElementById('output-json').textContent = JSON.stringify(config, null, 2);
+    });
+
+    document.getElementById('btn-copy').addEventListener('click', function() {
+      const text = document.getElementById('output-json').textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        alert('Configuration copied to clipboard!');
+      }).catch(err => {
+        alert('Failed to copy: ' + err);
+      });
+    });
+  </script>
+</body>
+</html>
